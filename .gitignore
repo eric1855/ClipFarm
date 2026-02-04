@@ -1,0 +1,43 @@
+.venv/
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+dist/
+.eggs/
+*.egg-info/
+.DS_Store
+Thumbs.db
+.mypy_cache/
+.pytest_cache/
+.ipynb_checkpoints/
+.idea/
+.vscode/
+logs/
+.tmp/
+
+# Environment / secrets
+.env
+.env.*
+
+# Generated outputs and large binaries
+captions_out/
+uploads/
+outputs/
+candidate_videos/
+output_videos/
+input_videos/
+*.srt
+*.vtt
+
+# Media files (do not commit large videos)
+*.mp4
+*.mov
+*.mkv
+*.avi
+
+# Artifacts (keep prompt file tracked; ignore other large text if needed)
+# artifacts/

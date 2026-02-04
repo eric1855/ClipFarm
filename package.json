@@ -1,0 +1,31 @@
+{
+  "name": "caption-extraction-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Caption Extraction API using Tailwind CSS",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build-css": "tailwindcss -i ./public/css/input.css -o ./public/css/output.css --watch"
+  },
+  "keywords": [
+    "caption",
+    "extraction",
+    "whisper",
+    "tailwind",
+    "nodejs"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "tailwindcss": "^3.3.5"
+  }
+}
