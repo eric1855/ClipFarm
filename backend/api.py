@@ -12,7 +12,7 @@ Requires env var `ANTHROPIC_API_KEY`.
 from __future__ import annotations
 
 import os
-from typing import Any, List, Literal, Optional, Union
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Query, Form
 from fastapi.middleware.cors import CORSMiddleware
@@ -875,6 +875,8 @@ class CreateCandidatesRequest(BaseModel):
     segments: Optional[List[SegmentModel]] = None
     output_dir: Optional[str] = None  # defaults to candidate_videos
     combine_output: bool = True
+    words_data: Optional[List[Dict[str, Any]]] = None  # word-level timestamps for subtitle burn-in
+    transition_titles: Optional[List[str]] = None  # AI-generated title cards
 
 
 class CreateCandidatesResponse(BaseModel):
@@ -1293,13 +1295,46 @@ async def upload_video(
                 with open(os.path.join(job_dir, "selection.json"), "w", encoding="utf-8") as fsel:
                     fsel.write(selection.model_dump_json(indent=2))
 
+                # Load word-level timestamps for subtitle burn-in
+                words_data = []
+                words_json_path = os.path.join(job_dir, "words.json")
+                if os.path.exists(words_json_path):
+                    with open(words_json_path, "r", encoding="utf-8") as fw:
+                        words_data = json.load(fw)
+
+                # Generate transition titles via Gemini
+                transition_titles = []
+                try:
+                    sorted_clips = sorted(selection.clips, key=lambda c: c.start)
+                    clip_summaries = [f"Clip {i+1}: \"{c.preview_text[:120]}\"" for i, c in enumerate(sorted_clips)]
+                    title_prompt = (
+                        "For each video clip below, generate a short dramatic title (3-8 words) "
+                        "that would appear as a title card before the clip in a highlight reel. "
+                        "Make them punchy and engaging. Return ONLY a JSON array of strings, one per clip.\n\n"
+                        + "\n".join(clip_summaries)
+                    )
+                    if genai is not None and isinstance(client, genai.Client):
+                        title_text = _gemini_chat(client, [{"role": "user", "content": title_prompt}], DEFAULT_MODEL, max_tokens=1024)
+                    else:
+                        title_resp = client.chat.completions.create(
+                            model=DEFAULT_MODEL,
+                            messages=[{"role": "user", "content": title_prompt}],
+                            max_tokens=1024, temperature=0.7,
+                        )
+                        title_text = _extract_text_from_response(title_resp)
+                    transition_titles = json.loads(title_text)
+                    logger.info(f"Generated {len(transition_titles)} transition titles")
+                except Exception as te:
+                    logger.warning(f"Transition title generation failed: {te}")
+
                 logger.info("Starting candidate generation via internal create-candidates endpoint")
-                # Compose request and call internal function to reuse logic
                 cc_req = CreateCandidatesRequest(
                     video_path=meta.get("local_copy") or meta["path"],
                     selection=selection,
                     output_dir=CANDIDATE_VIDEOS_DIR,
                     combine_output=False,
+                    words_data=words_data,
+                    transition_titles=transition_titles,
                 )
                 cc_resp = create_candidate_videos(cc_req)
                 resp_payload["candidates"] = cc_resp.candidates
@@ -1606,7 +1641,9 @@ def create_candidate_videos(req: CreateCandidatesRequest):
     # Run splicer
     try:
         _ensure_ffmpeg_available()
-        splicer = VS(video_path, temp_json, out_dir)
+        splicer = VS(video_path, temp_json, out_dir,
+                     words_data=req.words_data or [],
+                     transition_titles=req.transition_titles or [])
         candidate_paths = splicer.create_all_candidates() or []
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Splicer error: {e}")

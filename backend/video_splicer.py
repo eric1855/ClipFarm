@@ -14,16 +14,19 @@ import argparse
 from datetime import datetime
 
 class VideoSplicer:
-    def __init__(self, input_video: str, sample_output_path: str, output_dir: str = "candidate_videos"):
+    def __init__(self, input_video: str, sample_output_path: str, output_dir: str = "candidate_videos",
+                 words_data: List[Dict] = None, transition_titles: List[str] = None):
         self.input_video = input_video
         self.sample_output_path = sample_output_path
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
-        
+        self.words_data = words_data or []
+        self.transition_titles = transition_titles or []
+
         # Load the sample output data
         with open(sample_output_path, 'r') as f:
             self.data = json.load(f)
-        
+
         self.clips = self.data['clips']
         print(f"Loaded {len(self.clips)} clips from {sample_output_path}")
         
@@ -34,13 +37,142 @@ class VideoSplicer:
         secs = seconds % 60
         return f"{hours:02d}:{minutes:02d}:{secs:06.3f}"
     
-    def extract_clip(self, start: float, end: float, output_path: str) -> bool:
+    def _get_video_info(self):
+        """Get source video width, height, and fps using ffprobe."""
+        cmd = [
+            'ffprobe', '-v', 'quiet', '-print_format', 'json',
+            '-show_streams', '-select_streams', 'v:0', self.input_video
+        ]
+        try:
+            r = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            info = json.loads(r.stdout)
+            stream = info['streams'][0]
+            w = int(stream['width'])
+            h = int(stream['height'])
+            # Parse fps from r_frame_rate like "30/1" or "30000/1001"
+            num, den = stream.get('r_frame_rate', '30/1').split('/')
+            fps = round(int(num) / int(den))
+            return w, h, fps
+        except Exception:
+            return 1920, 1080, 30  # sensible defaults
+
+    def _generate_clip_srt(self, clip: Dict, output_path: str) -> bool:
+        """Generate an SRT file for a single clip using word-level timestamps."""
+        if not self.words_data:
+            return False
+
+        clip_start = clip['start']
+        clip_end = clip['end']
+
+        # Filter words within clip range
+        clip_words = [w for w in self.words_data if w.get('start', 0) >= clip_start - 0.05 and w.get('end', 0) <= clip_end + 0.05]
+        if not clip_words:
+            return False
+
+        # Group words into subtitle lines (max 5 words per line)
+        subtitles = []
+        group = []
+        for word in clip_words:
+            group.append(word)
+            text_so_far = ' '.join(w.get('word', w.get('text', '')) for w in group)
+            is_punctuation_break = text_so_far.rstrip().endswith(('.', '!', '?', '…', ';', ':'))
+            if len(group) >= 5 or is_punctuation_break:
+                subtitles.append({
+                    'start': group[0].get('start', 0) - clip_start,
+                    'end': group[-1].get('end', 0) - clip_start,
+                    'text': text_so_far.strip()
+                })
+                group = []
+        if group:
+            subtitles.append({
+                'start': group[0].get('start', 0) - clip_start,
+                'end': group[-1].get('end', 0) - clip_start,
+                'text': ' '.join(w.get('word', w.get('text', '')) for w in group).strip()
+            })
+
+        # Ensure no negative timestamps
+        for s in subtitles:
+            s['start'] = max(0.0, s['start'])
+            s['end'] = max(s['start'] + 0.1, s['end'])
+
+        # Write SRT
+        with open(output_path, 'w', encoding='utf-8') as f:
+            for i, sub in enumerate(subtitles, 1):
+                start_ts = self._format_srt_ts(sub['start'])
+                end_ts = self._format_srt_ts(sub['end'])
+                f.write(f"{i}\n{start_ts} --> {end_ts}\n{sub['text']}\n\n")
+        return True
+
+    def _format_srt_ts(self, seconds: float) -> str:
+        """Format seconds as SRT timestamp: HH:MM:SS,mmm"""
+        h = int(seconds // 3600)
+        m = int((seconds % 3600) // 60)
+        s = seconds % 60
+        return f"{h:02d}:{m:02d}:{s:06.3f}".replace('.', ',')
+
+    def _generate_title_card(self, text: str, duration: float, output_path: str,
+                              width: int, height: int, fps: int) -> bool:
+        """Generate a title card MP4: text centered on black background with silent audio."""
+        # Escape special chars for FFmpeg drawtext
+        escaped = text.replace("'", "'\\''").replace(":", "\\:").replace("%", "%%")
+        font_path = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
+        fontsize = max(36, min(64, width // 20))
+
+        cmd = [
+            'ffmpeg', '-y',
+            '-f', 'lavfi', '-i', f'color=c=black:s={width}x{height}:d={duration}:r={fps}',
+            '-f', 'lavfi', '-i', f'anullsrc=r=44100:cl=stereo',
+            '-vf', (
+                f"drawtext=text='{escaped}':"
+                f"fontfile='{font_path}':"
+                f"fontsize={fontsize}:"
+                f"fontcolor=white:"
+                f"x=(w-text_w)/2:y=(h-text_h)/2:"
+                f"shadowcolor=black:shadowx=2:shadowy=2"
+            ),
+            '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23',
+            '-pix_fmt', 'yuv420p',
+            '-c:a', 'aac', '-b:a', '128k',
+            '-shortest',
+            str(output_path)
+        ]
+        try:
+            subprocess.run(cmd, capture_output=True, text=True, check=True)
+            return True
+        except subprocess.CalledProcessError as e:
+            print(f"Error creating title card: {e.stderr}")
+            return False
+
+    def extract_clip(self, start: float, end: float, output_path: str, subtitle_path: str = None) -> bool:
         """Extract a single clip using FFmpeg with fallbacks.
 
         Try stream copy first; if it fails (e.g., non-keyframe start), fall back to re-encode.
         """
         start_time = self.format_time(start)
         duration = max(0.0, end - start)
+
+        # If subtitles requested, go straight to re-encode with subtitle filter
+        if subtitle_path and os.path.exists(subtitle_path):
+            # Escape path for FFmpeg filter (colons and backslashes)
+            escaped_sub = subtitle_path.replace('\\', '/').replace(':', '\\:')
+            sub_style = "FontSize=24,Alignment=2,MarginV=30,BorderStyle=3,Outline=2,Shadow=1,Bold=1,Fontname=Arial"
+            cmd_sub = [
+                'ffmpeg', '-y',
+                '-ss', start_time,
+                '-t', str(duration),
+                '-i', self.input_video,
+                '-vf', f"subtitles='{escaped_sub}':force_style='{sub_style}'",
+                '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23',
+                '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+                '-c:a', 'aac', '-b:a', '128k',
+                output_path
+            ]
+            try:
+                subprocess.run(cmd_sub, capture_output=True, text=True, check=True)
+                return True
+            except subprocess.CalledProcessError as e:
+                print(f"Subtitle burn failed, extracting without subs: {e.stderr[:200]}")
+                # Fall through to normal extraction
 
         # Attempt 1: copy (fast) with -ss before -i for keyframe-seeking
         cmd_copy_fast = [
@@ -223,22 +355,41 @@ class VideoSplicer:
         return None
     
     def create_candidate_5_chronological(self):
-        """Candidate 5: Clips in chronological order (by start time)"""
-        print("Creating Candidate 5: Chronological order...")
-        
-        # Sort clips by start time
+        """Candidate 5: Clips in chronological order with burned captions and title cards."""
+        print("Creating Candidate 5: Chronological order (enhanced)...")
+
         chronological_clips = sorted(self.clips, key=lambda x: x['start'])
-        clip_paths = []
-        
+        has_titles = bool(self.transition_titles)
+        has_words = bool(self.words_data)
+
+        # Get source video dimensions for title cards
+        if has_titles:
+            width, height, fps = self._get_video_info()
+
+        final_paths = []
         for i, clip in enumerate(chronological_clips):
+            # Insert title card before each clip
+            if has_titles and i < len(self.transition_titles) and self.transition_titles[i]:
+                title_path = self.output_dir / f"title_{i+1}.mp4"
+                if self._generate_title_card(self.transition_titles[i], 2.0, str(title_path), width, height, fps):
+                    final_paths.append(str(title_path))
+
+            # Generate per-clip SRT for subtitle burn-in
+            srt_path = None
+            if has_words:
+                srt_file = self.output_dir / f"chrono_clip_{i+1}.srt"
+                if self._generate_clip_srt(clip, str(srt_file)):
+                    srt_path = str(srt_file)
+
+            # Extract clip (with subtitles if available)
             clip_path = self.output_dir / f"chrono_clip_{i+1}.mp4"
-            if self.extract_clip(clip['start'], clip['end'], str(clip_path)):
-                clip_paths.append(str(clip_path))
-        
-        if clip_paths:
+            if self.extract_clip(clip['start'], clip['end'], str(clip_path), subtitle_path=srt_path):
+                final_paths.append(str(clip_path))
+
+        if final_paths:
             output_path = self.output_dir / "candidate_5_chronological.mp4"
-            if self.concatenate_videos(clip_paths, str(output_path), encode=True):
-                print(f"✓ Created: {output_path}")
+            if self.concatenate_videos(final_paths, str(output_path), encode=True):
+                print(f"✓ Created: {output_path} (with {'captions' if has_words else 'no captions'}, {'titles' if has_titles else 'no titles'})")
                 return str(output_path)
         return None
     
