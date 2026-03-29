@@ -54,6 +54,10 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
+    // Allow up to 10 minutes for full pipeline (transcribe + GPT + FFmpeg)
+    req.setTimeout(600000);
+    res.setTimeout(600000);
+
     // Build backend multipart form
     const form = new FormData();
     form.append('file', fs.createReadStream(req.file.path), req.file.originalname);
@@ -73,14 +77,21 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     }
 
     const url = `${API_BASE_URL}/upload?${params.toString()}`;
-    const response = await axios.post(url, form, { headers: form.getHeaders() });
+    const response = await axios.post(url, form, {
+      headers: form.getHeaders(),
+      timeout: 600000,
+      maxContentLength: Infinity,
+      maxBodyLength: Infinity,
+    });
     res.json(response.data);
   } catch (error) {
     console.error('Upload error:', error.response?.data || error.message);
-    res.status(500).json({ 
-      error: 'Upload failed', 
-      details: error.response?.data?.detail || error.message 
+    res.status(500).json({
+      error: 'Upload failed',
+      details: error.response?.data?.detail || error.message
     });
+  } finally {
+    if (req.file) fs.unlink(req.file.path, () => {});
   }
 });
 

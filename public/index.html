@@ -214,6 +214,14 @@
                     </div>
                 </div>
 
+                <!-- Candidate Videos Section -->
+                <div id="candidates-section" class="hidden terminal-section">
+                    <p class="prompt-line"><span class="text-terminal-cyan">clipfarm@ai</span>:<span class="text-terminal-amber">~</span>$ <span class="text-terminal-green-dim">ls candidate_videos/</span></p>
+                    <div id="candidates-list" class="mt-3">
+                        <!-- Dynamically populated by app.js -->
+                    </div>
+                </div>
+
                 <!-- Success Header -->
                 <div class="terminal-section">
                     <pre class="text-terminal-green text-center text-sm sm:text-base">
@@ -228,7 +236,7 @@
                     <div class="job-info-block">
                         <p><span class="text-terminal-green-dim">JOB_ID:</span>  <span id="job-id" class="text-terminal-cyan"></span></p>
                         <p><span class="text-terminal-green-dim">STATUS:</span>  <span id="job-status" class="text-terminal-green">COMPLETE</span></p>
-                        <p><span class="text-terminal-green-dim">FILES:</span>   <span class="text-terminal-amber">5 available</span></p>
+                        <p><span class="text-terminal-green-dim">FILES:</span>   <span id="file-count" class="text-terminal-amber">5 available</span></p>
                     </div>
                 </div>
 

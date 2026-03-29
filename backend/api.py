@@ -46,12 +46,18 @@ warnings.filterwarnings(
 logger = logging.getLogger("uvicorn.error")
 
 try:
-    # OpenAI client
+    # OpenAI client (kept for chat endpoints)
     from openai import OpenAI
-except Exception as e:  # pragma: no cover - graceful message if missing dependency
-    raise RuntimeError(
-        "Missing dependency: openai. Install with `pip install openai`."
-    ) from e
+except Exception:
+    OpenAI = None  # type: ignore
+
+try:
+    # Google GenAI SDK for Gemini clip selection
+    from google import genai
+    from google.genai import types as genai_types
+except Exception:
+    genai = None  # type: ignore
+    genai_types = None  # type: ignore
 
 try:
     # Faster-Whisper for transcription
@@ -184,7 +190,7 @@ def _openai_whisper_fallback_write_outputs(input_path: str, outdir: str) -> None
         write_vtt(segs, _Path(os.path.join(outdir, "transcript.vtt")))
 
 
-DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+DEFAULT_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 DEFAULT_SYSTEM_PROMPT_FILE = os.getenv(
     "SYSTEM_PROMPT_FILE",
@@ -233,14 +239,54 @@ def _build_messages(req: ChatRequest) -> List[dict]:
     raise HTTPException(status_code=400, detail="Provide `message` or `messages`.")
 
 
-def _get_client() -> OpenAI:
-    api_key = os.getenv("OPENAI_API_KEY")
-    if not api_key:
-        raise HTTPException(
-            status_code=500,
-            detail="OPENAI_API_KEY not set in environment.",
-        )
-    return OpenAI(api_key=api_key)
+def _get_client():
+    """Return a Google GenAI client for Gemini, or fall back to OpenAI client."""
+    gemini_key = os.getenv("GEMINI_API_KEY")
+    if gemini_key and genai is not None:
+        return genai.Client(api_key=gemini_key)
+    # Fallback to OpenAI if configured
+    openai_key = os.getenv("OPENAI_API_KEY")
+    if openai_key and OpenAI is not None:
+        return OpenAI(api_key=openai_key)
+    raise HTTPException(
+        status_code=500,
+        detail="GEMINI_API_KEY (or OPENAI_API_KEY) not set in environment.",
+    )
+
+
+def _gemini_chat(client, messages: list, model: str, max_tokens: int = 8192, temperature: float = 0.0) -> str:
+    """Call Gemini via native SDK and return the text response."""
+    # Convert OpenAI-style messages to Gemini format
+    system_text = None
+    contents = []
+    for msg in messages:
+        if msg["role"] == "system":
+            system_text = msg["content"]
+        else:
+            contents.append(msg["content"])
+
+    config = genai_types.GenerateContentConfig(
+        max_output_tokens=max_tokens,
+        temperature=temperature,
+        system_instruction=system_text,
+        thinking_config=genai_types.ThinkingConfig(thinking_budget=0),
+    )
+
+    response = client.models.generate_content(
+        model=model,
+        contents="\n\n".join(contents),
+        config=config,
+    )
+    # Debug: log finish reason
+    if response.candidates:
+        logger.info(f"Gemini finish_reason: {response.candidates[0].finish_reason}, token_count: {response.usage_metadata}")
+    text = (response.text or "").strip()
+    # Strip markdown code fences that Gemini wraps around JSON
+    if text.startswith("```"):
+        lines = text.split("\n")
+        lines = [l for l in lines if not l.strip().startswith("```")]
+        text = "\n".join(lines).strip()
+    return text
 
 
 def _resolve_system_prompt(explicit: Optional[str]) -> Optional[str]:
@@ -860,9 +906,16 @@ class ClipsSelectRequest(BaseModel):
 
 
 def _extract_text_from_response(resp) -> str:
-    # OpenAI chat completion content
+    # Chat completion content (OpenAI / Gemini compatible)
     try:
-        return (resp.choices[0].message.content or "").strip()
+        text = (resp.choices[0].message.content or "").strip()
+        # Strip markdown code fences that Gemini may wrap around JSON
+        if text.startswith("```"):
+            lines = text.split("\n")
+            # Remove first line (```json) and last line (```)
+            lines = [l for l in lines if not l.strip().startswith("```")]
+            text = "\n".join(lines).strip()
+        return text
     except Exception:
         return ""
 
@@ -871,6 +924,7 @@ def _validate_clips_output(text: str, *, min_gap_override: Optional[float] = Non
     try:
         data = json.loads(text)
     except json.JSONDecodeError as e:
+        logger.warning(f"Raw model response (first 2000 chars): {text[:2000]}")
         raise HTTPException(status_code=502, detail=f"Model did not return valid JSON: {e}")
 
     try:
@@ -1203,8 +1257,8 @@ async def upload_video(
                 with open(segments_json_path, "r", encoding="utf-8") as f:
                     segs = json.load(f)
 
-                # Build selection via OpenAI using the same prompt/validator as /process
-                logger.info("Selecting clips via OpenAI for candidate generation")
+                # Build selection via Gemini/OpenAI using the same prompt/validator as /process
+                logger.info("Selecting clips via AI for candidate generation")
                 client = _get_client()
                 system_text = _resolve_system_prompt(None)
                 user_json = json.dumps({"segments": segs}, ensure_ascii=False)
@@ -1222,14 +1276,19 @@ async def upload_video(
                         ),
                     })
                 messages.append({"role": "user", "content": user_json})
-                resp = client.chat.completions.create(
-                    model=DEFAULT_MODEL,
-                    messages=messages,
-                    max_tokens=2048,
-                    temperature=0.0,
-                    top_p=1.0,
-                )
-                text = _extract_text_from_response(resp)
+
+                # Use native Gemini SDK if available, otherwise OpenAI
+                if genai is not None and isinstance(client, genai.Client):
+                    text = _gemini_chat(client, messages, DEFAULT_MODEL)
+                else:
+                    resp = client.chat.completions.create(
+                        model=DEFAULT_MODEL,
+                        messages=messages,
+                        max_tokens=8192,
+                        temperature=0.0,
+                        top_p=1.0,
+                    )
+                    text = _extract_text_from_response(resp)
                 selection = _validate_clips_output(text, repair=True)
                 with open(os.path.join(job_dir, "selection.json"), "w", encoding="utf-8") as fsel:
                     fsel.write(selection.model_dump_json(indent=2))

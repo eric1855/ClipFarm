@@ -78,27 +78,27 @@ class CaptionExtractor {
         // Download links
         document.getElementById('download-txt').addEventListener('click', (e) => {
             e.preventDefault();
-            this.downloadFile('transcript.txt');
+            this.downloadFile('transcript.txt', e);
         });
 
         document.getElementById('download-segments').addEventListener('click', (e) => {
             e.preventDefault();
-            this.downloadFile('segments.json');
+            this.downloadFile('segments.json', e);
         });
 
         document.getElementById('download-words').addEventListener('click', (e) => {
             e.preventDefault();
-            this.downloadFile('words.json');
+            this.downloadFile('words.json', e);
         });
 
         document.getElementById('download-srt').addEventListener('click', (e) => {
             e.preventDefault();
-            this.downloadFile('transcript.srt');
+            this.downloadFile('transcript.srt', e);
         });
 
         document.getElementById('download-vtt').addEventListener('click', (e) => {
             e.preventDefault();
-            this.downloadFile('transcript.vtt');
+            this.downloadFile('transcript.vtt', e);
         });
     }
 
@@ -204,15 +204,17 @@ class CaptionExtractor {
                 formData.append('language', language);
             }
 
-            // Simulate progress
-            this.updateProgress(10, 'Uploading file...');
-            
+            this.updateProgress(10, 'Uploading file to server...');
+            this.startProgressSimulation();
+
             const response = await fetch('/api/upload', {
                 method: 'POST',
-                body: formData
+                body: formData,
+                signal: AbortSignal.timeout(600000),
             });
 
-            this.updateProgress(50, 'Processing with Whisper...');
+            this.stopProgressSimulation();
+            this.updateProgress(95, 'Receiving results...');
 
             const result = await response.json();
 
@@ -221,7 +223,7 @@ class CaptionExtractor {
             }
 
             this.updateProgress(100, 'Processing complete!');
-            
+
             // Wait a moment to show completion
             setTimeout(() => {
                 this.hideProgress();
@@ -230,6 +232,7 @@ class CaptionExtractor {
 
         } catch (error) {
             console.error('Upload error:', error);
+            this.stopProgressSimulation();
             this.hideProgress();
             this.showError(error.message || 'Upload failed. Please try again.');
         }
@@ -241,7 +244,41 @@ class CaptionExtractor {
     }
 
     hideProgress() {
+        this.stopProgressSimulation();
         document.getElementById('progress-section').classList.add('hidden');
+    }
+
+    startProgressSimulation() {
+        const phases = [
+            { at: 15, text: 'Transcribing audio with Whisper...' },
+            { at: 30, text: 'Analyzing transcript segments...' },
+            { at: 45, text: 'Selecting best clips via GPT-4o...' },
+            { at: 55, text: 'Extracting video segments with FFmpeg...' },
+            { at: 65, text: 'Generating candidate compilations...' },
+            { at: 75, text: 'Encoding candidate videos...' },
+            { at: 85, text: 'Finalizing output...' },
+        ];
+
+        let phaseIndex = 0;
+        let currentPercent = 10;
+
+        this._progressInterval = setInterval(() => {
+            if (phaseIndex < phases.length && currentPercent >= phases[phaseIndex].at - 1) {
+                this.updateProgress(phases[phaseIndex].at, phases[phaseIndex].text);
+                currentPercent = phases[phaseIndex].at;
+                phaseIndex++;
+            } else if (currentPercent < 90) {
+                currentPercent += 0.5;
+                document.getElementById('progress-fill').style.width = currentPercent + '%';
+            }
+        }, 2000);
+    }
+
+    stopProgressSimulation() {
+        if (this._progressInterval) {
+            clearInterval(this._progressInterval);
+            this._progressInterval = null;
+        }
     }
 
     updateProgress(percent, text) {
@@ -251,10 +288,10 @@ class CaptionExtractor {
 
     showResults(result) {
         this.currentJobId = result.job_id;
-        
+
         document.getElementById('job-id').textContent = result.job_id;
         document.getElementById('job-status').textContent = 'Completed Successfully';
-        
+
         // Update download links
         const baseUrl = `/api/download/${result.job_id}`;
         document.getElementById('download-txt').href = `${baseUrl}/transcript.txt`;
@@ -262,21 +299,8 @@ class CaptionExtractor {
         document.getElementById('download-words').href = `${baseUrl}/words.json`;
         document.getElementById('download-srt').href = `${baseUrl}/transcript.srt`;
         document.getElementById('download-vtt').href = `${baseUrl}/transcript.vtt`;
-        
-        // Show results with animation
-        const resultsSection = document.getElementById('results-section');
-        resultsSection.classList.remove('hidden');
-        resultsSection.classList.add('animate-fade-in');
-        
-        // Add success animation to download items
-        setTimeout(() => {
-            const downloadItems = document.querySelectorAll('.download-item');
-            downloadItems.forEach((item, index) => {
-                setTimeout(() => {
-                    item.classList.add('animate-slide-up');
-                }, index * 100);
-            });
-        }, 300);
+
+        let totalFiles = 5; // transcript files
 
         // Handle final video playback + download if available
         try {
@@ -291,16 +315,127 @@ class CaptionExtractor {
                 dlEl.href = url;
                 dlEl.setAttribute('download', fname);
                 card.classList.remove('hidden');
+                totalFiles += 1;
             } else if (card) {
                 card.classList.add('hidden');
             }
         } catch (e) {
             console.warn('Final video not available:', e);
         }
+
+        // Handle candidate videos
+        try {
+            const candidatesSection = document.getElementById('candidates-section');
+            const candidatesList = document.getElementById('candidates-list');
+            if (result.candidates && result.candidates.length > 0 && candidatesSection && candidatesList) {
+                candidatesList.innerHTML = '';
+                this.renderCandidates(result.candidates, candidatesList);
+                candidatesSection.classList.remove('hidden');
+                totalFiles += result.candidates.length;
+            } else if (candidatesSection) {
+                candidatesSection.classList.add('hidden');
+            }
+        } catch (e) {
+            console.warn('Candidate videos not available:', e);
+        }
+
+        // Update file count display
+        const fileCountEl = document.getElementById('file-count');
+        if (fileCountEl) {
+            fileCountEl.textContent = `${totalFiles} available`;
+        }
+
+        // Show results with animation
+        const resultsSection = document.getElementById('results-section');
+        resultsSection.classList.remove('hidden');
+        resultsSection.classList.add('animate-fade-in');
+
+        // Add success animation to download items
+        setTimeout(() => {
+            const downloadItems = document.querySelectorAll('.download-item');
+            downloadItems.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('animate-slide-up');
+                }, index * 100);
+            });
+        }, 300);
+    }
+
+    escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    renderCandidates(candidates, container) {
+        const LABELS = {
+            'all_clips':     { label: 'ALL CLIPS',      desc: 'All top-ranked clips in score order' },
+            'high_score':    { label: 'HIGH SCORE',      desc: 'Only clips scoring above 0.85' },
+            'short_clips':   { label: 'SHORT CLIPS',     desc: 'Clips under 35s for quick consumption' },
+            'best_hooks':    { label: 'BEST HOOKS',      desc: 'Clips with strongest opening hooks' },
+            'chronological': { label: 'CHRONOLOGICAL',   desc: 'Clips in original timeline order' },
+            'segments':      { label: 'SEGMENTS',        desc: 'Individual transcript segments' },
+            'no_promo':      { label: 'NO PROMO',        desc: 'Promotional content filtered out' },
+        };
+
+        candidates.forEach((absPath, index) => {
+            const fname = absPath.split(/[/\\]/).pop();
+            const url = `/media/candidates/${encodeURIComponent(fname)}`;
+
+            let info = { label: `CANDIDATE ${index + 1}`, desc: fname };
+            for (const [key, val] of Object.entries(LABELS)) {
+                if (fname.includes(key)) {
+                    info = val;
+                    break;
+                }
+            }
+
+            const card = document.createElement('div');
+            card.className = 'candidate-card';
+            card.style.animationDelay = `${index * 100}ms`;
+            const safeLabel = this.escapeHtml(info.label);
+            const safeDesc = this.escapeHtml(info.desc);
+            const safeFname = this.escapeHtml(fname);
+            card.innerHTML = `
+                <p class="candidate-label">
+                    <span class="text-terminal-amber">[${index + 1}]</span> ${safeLabel}
+                </p>
+                <p class="candidate-desc">&gt; ${safeDesc}</p>
+                <div class="video-frame">
+                    <video class="w-full bg-black" controls preload="metadata">
+                        <source src="${url}" type="video/mp4">
+                    </video>
+                </div>
+                <div class="candidate-actions">
+                    <a href="${url}" download="${safeFname}" class="download-link">
+                        [*] Download
+                    </a>
+                </div>
+            `;
+            container.appendChild(card);
+        });
     }
 
     hideResults() {
         document.getElementById('results-section').classList.add('hidden');
+        const candidatesSection = document.getElementById('candidates-section');
+        if (candidatesSection) {
+            candidatesSection.classList.add('hidden');
+        }
+        const candidatesList = document.getElementById('candidates-list');
+        if (candidatesList) {
+            candidatesList.querySelectorAll('video').forEach(v => { v.pause(); v.removeAttribute('src'); v.load(); });
+            candidatesList.innerHTML = '';
+        }
+        const finalCard = document.getElementById('final-video-card');
+        if (finalCard) {
+            finalCard.classList.add('hidden');
+        }
+        const finalVideo = document.getElementById('final-video');
+        if (finalVideo) {
+            finalVideo.removeAttribute('src');
+            finalVideo.load();
+        }
     }
 
     showError(message) {
@@ -326,18 +461,21 @@ class CaptionExtractor {
         document.getElementById('vad-filter').checked = false;
     }
 
-    async downloadFile(filename) {
+    async downloadFile(filename, e) {
         if (!this.currentJobId) return;
 
+        const downloadButton = e && e.target ? e.target.closest('a') : null;
+        let originalText = '';
+
         try {
-            // Add loading state to download button
-            const downloadButton = event.target.closest('a');
-            const originalText = downloadButton.innerHTML;
-            downloadButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Downloading...';
-            downloadButton.classList.add('opacity-75', 'pointer-events-none');
+            if (downloadButton) {
+                originalText = downloadButton.innerHTML;
+                downloadButton.innerHTML = 'Downloading...';
+                downloadButton.classList.add('opacity-75', 'pointer-events-none');
+            }
 
             const response = await fetch(`/api/download/${this.currentJobId}/${filename}`);
-            
+
             if (!response.ok) {
                 throw new Error('Download failed');
             }
@@ -352,24 +490,22 @@ class CaptionExtractor {
             window.URL.revokeObjectURL(url);
             document.body.removeChild(a);
 
-            // Reset button state
-            downloadButton.innerHTML = originalText;
-            downloadButton.classList.remove('opacity-75', 'pointer-events-none');
-            
-            // Add success feedback
-            downloadButton.classList.add('animate-success-bounce');
-            setTimeout(() => {
-                downloadButton.classList.remove('animate-success-bounce');
-            }, 2000);
-            
+            if (downloadButton) {
+                downloadButton.innerHTML = originalText;
+                downloadButton.classList.remove('opacity-75', 'pointer-events-none');
+                downloadButton.classList.add('animate-success-bounce');
+                setTimeout(() => {
+                    downloadButton.classList.remove('animate-success-bounce');
+                }, 2000);
+            }
+
         } catch (error) {
             console.error('Download error:', error);
             this.showError('Download failed. Please try again.');
-            
-            // Reset button state on error
-            const downloadButton = event.target.closest('a');
-            downloadButton.innerHTML = originalText;
-            downloadButton.classList.remove('opacity-75', 'pointer-events-none');
+            if (downloadButton && originalText) {
+                downloadButton.innerHTML = originalText;
+                downloadButton.classList.remove('opacity-75', 'pointer-events-none');
+            }
         }
     }
 }
