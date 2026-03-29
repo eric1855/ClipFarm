@@ -29,7 +29,7 @@ app.use('/media/candidates', express.static(CANDIDATE_DIR));
 const upload = multer({
   dest: 'uploads/',
   limits: {
-    fileSize: 100 * 1024 * 1024 // 100MB limit
+    fileSize: 500 * 1024 * 1024 // 500MB limit
   },
   fileFilter: (req, file, cb) => {
     const allowedTypes = ['video/mp4', 'video/avi', 'video/mov', 'video/mkv', 
@@ -135,7 +135,7 @@ app.get('/api/health', async (req, res) => {
 app.use((error, req, res, next) => {
   if (error instanceof multer.MulterError) {
     if (error.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({ error: 'File too large. Maximum size is 100MB.' });
+      return res.status(400).json({ error: 'File too large. Maximum size is 500MB.' });
     }
   }
   
