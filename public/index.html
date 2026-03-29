@@ -3,470 +3,443 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClipFarm - AI Video Clip Extractor</title>
+    <title>ClipFarm - Turn Long Videos Into Viral Clips</title>
     <link href="/css/output.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
-<body class="bg-cream-50 min-h-screen font-brutal noise-bg">
+<body>
 
-    <!-- Decorative Marquee Strip -->
-    <div class="marquee-strip bg-electric-yellow border-b-4 border-jet overflow-hidden py-2">
-        <div class="marquee-content animate-marquee whitespace-nowrap">
-            <span class="inline-block mx-8 text-jet font-black text-sm tracking-widest uppercase">
-                <i class="fas fa-scissors mr-2"></i> CLIP IT <i class="fas fa-star mx-4"></i> FARM IT <i class="fas fa-bolt mx-4"></i> SHIP IT <i class="fas fa-fire mx-4"></i> AI POWERED <i class="fas fa-star mx-4"></i> WHISPER + GPT <i class="fas fa-bolt mx-4"></i> EXTRACT CLIPS <i class="fas fa-fire mx-4"></i> AUTO CAPTIONS <i class="fas fa-scissors mx-4"></i> CLIP IT <i class="fas fa-star mx-4"></i> FARM IT <i class="fas fa-bolt mx-4"></i> SHIP IT <i class="fas fa-fire mx-4"></i> AI POWERED <i class="fas fa-star mx-4"></i> WHISPER + GPT <i class="fas fa-bolt mx-4"></i> EXTRACT CLIPS <i class="fas fa-fire mx-4"></i> AUTO CAPTIONS
-            </span>
+    <!-- Floating Nav Pill -->
+    <nav class="nav-pill" id="nav-pill">
+        <span class="nav-pill-brand">ClipFarm</span>
+        <div id="connection-status" style="display:flex;align-items:center;gap:6px;">
+            <div class="nav-pill-dot"></div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Header -->
-    <header class="bg-white border-b-4 border-jet sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center gap-4">
-                    <!-- Logo Badge -->
-                    <div class="logo-badge bg-electric-yellow border-4 border-jet shadow-brutal-sm px-4 py-2 inline-block transform -rotate-2 hover:rotate-1 transition-transform">
-                        <h1 class="text-2xl sm:text-3xl font-black text-jet tracking-tight uppercase">
-                            <i class="fas fa-seedling mr-1"></i> ClipFarm
-                        </h1>
-                    </div>
-                    <p class="hidden sm:block text-jet font-bold text-sm uppercase tracking-wide mt-1">AI Clip Extractor</p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <!-- AI Badge -->
-                    <div class="hidden sm:block bg-coral border-3 border-jet text-white font-black text-xs uppercase px-3 py-1 transform rotate-2 shadow-brutal-sm">
-                        AI Powered <i class="fas fa-robot ml-1"></i>
-                    </div>
-                    <div id="connection-status" class="flex items-center px-4 py-2 bg-cream-100 border-3 border-jet shadow-brutal-sm">
-                        <div class="w-3 h-3 bg-gray-400 border-2 border-jet rounded-full mr-2 animate-pulse"></div>
-                        <span class="text-sm text-jet font-bold">Checking...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-
-        <!-- Hero Section -->
-        <div class="text-center mb-10 relative">
-            <div class="inline-block relative">
-                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black text-jet uppercase leading-tight">
-                    Turn Long Videos<br>
-                    <span class="wavy-underline">Into Viral Clips</span>
-                </h2>
-                <!-- Decorative "NEW" sticker -->
-                <div class="absolute -top-4 -right-8 sm:-right-12 bg-coral text-white font-black text-xs uppercase px-3 py-1 rounded-full border-3 border-jet shadow-brutal-sm transform rotate-12 animate-wiggle">
-                    NEW!
-                </div>
-            </div>
-            <p class="text-lg sm:text-xl text-jet font-bold mt-4 max-w-xl mx-auto transform -rotate-1">
-                Upload. Transcribe. Extract. Download. <span class="bg-electric-yellow px-2 border-b-3 border-jet">It's that easy.</span>
-            </p>
+    <!-- ==================== CHAPTER 1: HERO ==================== -->
+    <section class="chapter chapter-white" id="chapter-hero">
+        <!-- Animated gradient blobs -->
+        <div class="blob-container">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+            <div class="blob blob-4"></div>
         </div>
 
-        <!-- Upload Section Card -->
-        <div class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-
-            <!-- Section Header -->
-            <div class="flex items-center mb-6 gap-3">
-                <div class="step-number bg-electric-lime border-4 border-jet w-12 h-12 flex items-center justify-center shadow-brutal-sm transform -rotate-3">
-                    <span class="text-2xl font-black text-jet">1</span>
-                </div>
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-jet uppercase">Upload Your Video</h2>
-                    <p class="text-jet font-bold text-sm">Drop a file and let the AI do its thing</p>
-                </div>
-                <!-- Sticker -->
-                <div class="hidden md:block ml-auto bg-electric-blue text-white font-black text-xs uppercase px-3 py-1 border-3 border-jet shadow-brutal-sm transform rotate-3">
-                    <i class="fas fa-magic mr-1"></i> Auto-Magic
-                </div>
+        <div class="chapter-content" style="position:relative;z-index:1;text-align:center;">
+            <h1 class="hero-title anim-element">ClipFarm</h1>
+            <p class="hero-subtitle anim-element delay-1">Turn long videos into viral clips</p>
+            <div class="scroll-indicator anim-element delay-2">
+                <span style="font-size:0.8rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;">Scroll</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
             </div>
+        </div>
+    </section>
 
-            <!-- File Upload Area -->
-            <div id="upload-area" class="upload-area mb-6 group cursor-pointer">
-                <div class="upload-content text-center">
-                    <div class="mb-6 inline-block">
-                        <div class="bg-electric-yellow border-4 border-jet p-6 shadow-brutal-sm inline-block transform group-hover:-rotate-3 transition-transform duration-200">
-                            <i class="fas fa-cloud-upload-alt text-5xl sm:text-6xl text-jet"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-black text-jet uppercase mb-2">Drop Your File Here</h3>
-                    <p class="text-jet font-bold mb-5">or click to browse your computer</p>
-                    <div class="flex flex-wrap justify-center gap-2 mb-5">
-                        <span class="file-badge bg-electric-yellow">MP4</span>
-                        <span class="file-badge bg-electric-lime">AVI</span>
-                        <span class="file-badge bg-electric-purple text-white">MOV</span>
-                        <span class="file-badge bg-coral text-white">WAV</span>
-                        <span class="file-badge bg-electric-blue text-white">MP3</span>
-                        <span class="file-badge bg-cream-200">M4A</span>
-                    </div>
-                    <div class="inline-block bg-cream-100 border-3 border-jet px-4 py-2 shadow-brutal-sm">
-                        <p class="text-sm text-jet font-bold">
-                            <i class="fas fa-info-circle mr-2"></i>
-                            Maximum file size: 100MB
-                        </p>
-                    </div>
-                    <input type="file" id="file-input" class="hidden" accept=".mp4,.avi,.mov,.mkv,.wav,.mp3,.m4a,.flac,.ogg">
+    <!-- ==================== CHAPTER 2: UPLOAD ==================== -->
+    <section class="chapter chapter-gray" id="chapter-upload">
+        <div class="chapter-content">
+            <div class="upload-split">
+                <!-- Left: Copy -->
+                <div class="anim-left">
+                    <h2 class="chapter-heading">Drop your<br>video</h2>
+                    <p class="chapter-paragraph">
+                        Upload any video or audio file and our AI will transcribe it,
+                        find the most engaging moments, and extract them as perfectly
+                        timed short-form clips. Ready to share everywhere.
+                    </p>
                 </div>
-            </div>
 
-            <!-- Selected File Info -->
-            <div id="file-info" class="hidden mb-6 bg-electric-lime border-4 border-jet shadow-brutal p-5">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="bg-jet p-3 border-3 border-jet">
-                            <i class="fas fa-file-video text-electric-yellow text-2xl"></i>
-                        </div>
-                        <div>
-                            <p id="file-name" class="font-black text-jet text-lg uppercase"></p>
-                            <p id="file-size" class="text-sm text-jet font-bold"></p>
-                            <div class="flex items-center mt-1">
-                                <div class="w-3 h-3 bg-jet rounded-full mr-2"></div>
-                                <span class="text-xs text-jet font-black uppercase">Ready to process</span>
+                <!-- Right: Upload Zone -->
+                <div class="anim-right delay-2">
+                    <div id="upload-area" class="upload-area">
+                        <div class="upload-content">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin:0 auto 24px;">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <h3 class="upload-title">Drop Your File Here</h3>
+                            <p class="upload-hint">or click to browse your computer</p>
+                            <div class="upload-formats">
+                                <span class="format-tag">MP4</span>
+                                <span class="format-tag">AVI</span>
+                                <span class="format-tag">MOV</span>
+                                <span class="format-tag">WAV</span>
+                                <span class="format-tag">MP3</span>
+                                <span class="format-tag">M4A</span>
                             </div>
+                            <p class="upload-max">Maximum file size: 100MB</p>
+                            <input type="file" id="file-input" class="hidden" accept=".mp4,.avi,.mov,.mkv,.wav,.mp3,.m4a,.flac,.ogg">
                         </div>
                     </div>
-                    <button id="remove-file" class="bg-coral border-3 border-jet text-white p-2 shadow-brutal-sm hover:shadow-brutal-active hover:translate-x-1 hover:translate-y-1 transition-all">
-                        <i class="fas fa-times text-lg"></i>
-                    </button>
-                </div>
-            </div>
 
-            <!-- Processing Options -->
-            <div class="bg-cream-100 border-4 border-jet p-6 mb-6 shadow-brutal-sm">
-                <div class="flex items-center mb-5 gap-3">
-                    <div class="step-number bg-coral text-white border-4 border-jet w-12 h-12 flex items-center justify-center shadow-brutal-sm transform rotate-2">
-                        <span class="text-2xl font-black">2</span>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-black text-jet uppercase">Processing Options</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label for="model-select" class="block text-sm font-black text-jet mb-2 uppercase tracking-wide">
-                            <i class="fas fa-brain text-electric-purple mr-2"></i>
-                            Whisper Model
-                        </label>
-                        <select id="model-select" class="brutal-select w-full">
-                            <option value="tiny">Tiny (Fastest)</option>
-                            <option value="base">Base</option>
-                            <option value="small" selected>Small (Recommended)</option>
-                            <option value="medium">Medium</option>
-                            <option value="large">Large (Most Accurate)</option>
-                            <option value="large-v2">Large v2</option>
-                            <option value="large-v3">Large v3</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="language-select" class="block text-sm font-black text-jet mb-2 uppercase tracking-wide">
-                            <i class="fas fa-globe text-electric-lime mr-2"></i>
-                            Language
-                        </label>
-                        <select id="language-select" class="brutal-select w-full">
-                            <option value="">Auto-detect</option>
-                            <option value="en">English</option>
-                            <option value="es">Spanish</option>
-                            <option value="fr">French</option>
-                            <option value="de">German</option>
-                            <option value="it">Italian</option>
-                            <option value="pt">Portuguese</option>
-                            <option value="ru">Russian</option>
-                            <option value="ja">Japanese</option>
-                            <option value="ko">Korean</option>
-                            <option value="zh">Chinese</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="compute-type" class="block text-sm font-black text-jet mb-2 uppercase tracking-wide">
-                            <i class="fas fa-microchip text-coral mr-2"></i>
-                            Compute Type
-                        </label>
-                        <select id="compute-type" class="brutal-select w-full">
-                            <option value="int8_float16">GPU Optimized</option>
-                            <option value="int8">CPU Only</option>
-                            <option value="float16">GPU High Precision</option>
-                        </select>
-                    </div>
-
-                    <div class="flex items-center justify-center">
-                        <div class="bg-white p-4 border-4 border-jet shadow-brutal-sm w-full">
-                            <label for="vad-filter" class="flex items-center cursor-pointer">
-                                <input type="checkbox" id="vad-filter" class="brutal-checkbox mr-3 w-6 h-6 accent-electric-yellow">
-                                <div>
-                                    <div class="text-sm font-black text-jet uppercase">
-                                        <i class="fas fa-volume-up text-electric-blue mr-2"></i>
-                                        Voice Detection
-                                    </div>
-                                    <div class="text-xs text-jet font-bold">Filter out silence</div>
+                    <!-- Selected File Info -->
+                    <div id="file-info" class="hidden">
+                        <div class="flex" style="display:flex;align-items:center;justify-content:space-between;">
+                            <div style="display:flex;align-items:center;gap:16px;">
+                                <div style="width:48px;height:48px;border-radius:14px;background:#eef2ff;display:flex;align-items:center;justify-content:center;">
+                                    <i class="fas fa-file-video" style="font-size:1.3rem;color:#6366f1;"></i>
                                 </div>
-                            </label>
+                                <div>
+                                    <p id="file-name" style="font-weight:700;color:#000;font-size:1rem;"></p>
+                                    <p id="file-size" style="font-size:0.85rem;color:#9ca3af;margin-top:2px;"></p>
+                                </div>
+                            </div>
+                            <button id="remove-file" class="btn-remove-file">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Optional Instructions -->
-            <div class="bg-white border-4 border-jet p-6 mb-6 shadow-brutal-sm">
-                <div class="flex items-center mb-4 gap-2">
-                    <i class="fas fa-bullseye text-electric-purple text-xl"></i>
-                    <h4 class="text-lg font-black text-jet uppercase">Optional Instructions</h4>
-                    <div class="ml-auto bg-electric-purple text-white font-black text-xs uppercase px-2 py-1 border-2 border-jet transform -rotate-2">
-                        Pro Tip
-                    </div>
-                </div>
-                <textarea id="instructions-input" rows="3" class="brutal-input w-full p-3" placeholder="Tell the clip selector what to do (e.g., 'Prefer definitions', 'Keep first sentence', 'Avoid sponsor mentions')"></textarea>
-            </div>
-
-            <!-- Thick Divider -->
-            <div class="border-t-4 border-jet border-dashed my-6"></div>
-
-            <!-- Upload Button -->
-            <button id="upload-btn" class="brutal-btn-primary w-full py-5 px-6" disabled>
-                <div class="flex items-center justify-center gap-3">
-                    <i class="fas fa-magic text-2xl"></i>
-                    <span class="text-xl">CREATE CLIPS</span>
-                    <i class="fas fa-arrow-right text-xl"></i>
-                </div>
-                <div class="text-sm font-bold mt-1 opacity-80">Powered by Whisper + GPT</div>
-            </button>
         </div>
+    </section>
 
-        <!-- Progress Section -->
-        <div id="progress-section" class="hidden brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-            <div class="text-center">
-                <div class="mb-6 inline-block">
-                    <div class="bg-electric-blue border-4 border-jet p-5 inline-block shadow-brutal-sm animate-wiggle">
-                        <div class="loading-spinner"></div>
-                    </div>
-                </div>
-                <h3 class="text-2xl sm:text-3xl font-black text-jet uppercase mb-2">Finding the Best Clips</h3>
-                <p id="progress-text" class="text-jet font-bold mb-6">Transcribing, selecting moments, preparing downloads...</p>
-                <div class="progress-brutal bg-cream-100 border-4 border-jet h-8 overflow-hidden relative">
-                    <div id="progress-fill" class="h-full bg-electric-yellow transition-all duration-500 ease-out relative" style="width: 0%">
-                        <div class="progress-stripes absolute inset-0"></div>
-                    </div>
-                </div>
-                <p class="text-sm text-jet font-bold mt-4 bg-cream-100 border-3 border-jet inline-block px-4 py-2 shadow-brutal-sm">
-                    <i class="fas fa-clock mr-2"></i> This may take a few minutes
+    <!-- ==================== CHAPTER 3: CONFIGURE ==================== -->
+    <section class="chapter chapter-white chapter-auto" id="chapter-configure">
+        <div class="chapter-content" style="max-width:900px;">
+            <div class="anim-element" style="text-align:center;">
+                <h2 class="chapter-heading">Fine-tune your extraction</h2>
+                <p class="chapter-paragraph" style="max-width:500px;margin:20px auto 0;">
+                    Customize the AI model, language, and processing options to get the best clips from your content.
                 </p>
             </div>
-        </div>
 
-        <!-- Results Section -->
-        <div id="results-section" class="hidden">
-            <!-- Final Clip Player -->
-            <div id="final-video-card" class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8 hidden">
-                <div class="flex items-center mb-4 gap-2">
-                    <div class="bg-electric-purple border-3 border-jet p-2 shadow-brutal-sm">
-                        <i class="fas fa-film text-white text-xl"></i>
+            <div class="options-grid">
+                <!-- Model -->
+                <div class="option-card anim-element delay-1">
+                    <div class="option-icon option-icon-purple">
+                        <i class="fas fa-brain"></i>
                     </div>
-                    <h4 class="text-xl font-black text-jet uppercase">Final Clip (Chronological)</h4>
+                    <div class="option-label">Whisper Model</div>
+                    <select id="model-select" class="story-select">
+                        <option value="tiny">Tiny (Fastest)</option>
+                        <option value="base">Base</option>
+                        <option value="small" selected>Small (Recommended)</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large (Most Accurate)</option>
+                        <option value="large-v2">Large v2</option>
+                        <option value="large-v3">Large v3</option>
+                    </select>
                 </div>
-                <div class="border-4 border-jet overflow-hidden shadow-brutal-sm">
-                    <video id="final-video" class="w-full bg-black" controls playsinline></video>
+
+                <!-- Language -->
+                <div class="option-card anim-element delay-2">
+                    <div class="option-icon option-icon-green">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="option-label">Language</div>
+                    <select id="language-select" class="story-select">
+                        <option value="">Auto-detect</option>
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="ru">Russian</option>
+                        <option value="ja">Japanese</option>
+                        <option value="ko">Korean</option>
+                        <option value="zh">Chinese</option>
+                    </select>
                 </div>
-                <div class="mt-4">
-                    <a id="download-final" class="brutal-btn-small bg-electric-purple text-white inline-flex items-center" download>
-                        <i class="fas fa-download mr-2"></i>Download Final Clip
-                    </a>
+
+                <!-- Compute Type -->
+                <div class="option-card anim-element delay-3">
+                    <div class="option-icon option-icon-orange">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="option-label">Compute Type</div>
+                    <select id="compute-type" class="story-select">
+                        <option value="int8_float16">GPU Optimized</option>
+                        <option value="int8">CPU Only</option>
+                        <option value="float16">GPU High Precision</option>
+                    </select>
+                </div>
+
+                <!-- VAD Filter -->
+                <div class="option-card anim-element delay-4">
+                    <div class="option-icon option-icon-blue">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <div class="option-label">Voice Detection</div>
+                    <label class="story-checkbox-card">
+                        <input type="checkbox" id="vad-filter" class="story-checkbox">
+                        <div>
+                            <div class="story-checkbox-label">Enable VAD Filter</div>
+                            <div class="story-checkbox-desc">Filters out silent sections</div>
+                        </div>
+                    </label>
                 </div>
             </div>
 
-            <!-- Success Header -->
-            <div class="text-center mb-8">
-                <div class="mb-4 inline-block">
-                    <div class="bg-electric-lime border-4 border-jet p-5 inline-block shadow-brutal-sm transform -rotate-2">
-                        <i class="fas fa-check text-jet text-4xl"></i>
-                    </div>
-                </div>
-                <h3 class="text-3xl sm:text-4xl font-black text-jet uppercase mb-2">Your Clips Are Ready!</h3>
-                <p class="text-jet font-bold text-lg">We generated captions and candidate short-form videos</p>
-                <div class="inline-block bg-electric-yellow border-3 border-jet px-4 py-1 mt-3 shadow-brutal-sm transform rotate-1 font-black text-sm uppercase">
-                    Fresh off the farm
-                </div>
+            <!-- Instructions -->
+            <div class="anim-element delay-5">
+                <textarea id="instructions-input" class="story-textarea" rows="3" placeholder="Optional: Tell the clip selector what to look for (e.g., 'Prefer definitions', 'Keep first sentence', 'Avoid sponsor mentions')"></textarea>
             </div>
 
-            <!-- Job Info -->
-            <div class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-                <div class="flex items-center mb-5 gap-2">
-                    <div class="bg-electric-blue border-3 border-jet p-2 shadow-brutal-sm">
-                        <i class="fas fa-info-circle text-white text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-black text-jet uppercase">Job Information</h4>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="bg-blue-50 p-4 border-3 border-jet">
-                        <span class="text-sm font-black text-jet uppercase">Job ID</span>
-                        <p id="job-id" class="text-sm text-jet font-mono bg-white p-2 border-2 border-jet mt-2"></p>
-                    </div>
-                    <div class="bg-green-50 p-4 border-3 border-jet">
-                        <span class="text-sm font-black text-jet uppercase">Status</span>
-                        <p id="job-status" class="text-sm text-jet font-black mt-2 flex items-center uppercase">
-                            <i class="fas fa-check-circle mr-2"></i>Completed Successfully
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Download Files -->
-            <div class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-                <div class="flex items-center mb-6 gap-2">
-                    <div class="step-number bg-electric-yellow border-4 border-jet w-12 h-12 flex items-center justify-center shadow-brutal-sm transform rotate-3">
-                        <span class="text-2xl font-black text-jet">3</span>
-                    </div>
-                    <h4 class="text-2xl font-black text-jet uppercase">Download Your Files</h4>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    <!-- Transcript -->
-                    <div class="download-item download-card-yellow">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-yellow">
-                                <i class="fas fa-file-alt text-jet text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">Full Transcript</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Complete text transcript</p>
-                            <a id="download-txt" class="brutal-btn-download bg-electric-yellow text-jet w-full">
-                                <i class="fas fa-download mr-2"></i>Download TXT
-                            </a>
+            <!-- Create Clips Button -->
+            <div class="anim-element delay-6">
+                <button id="upload-btn" class="btn-create" disabled>
+                    <div>
+                        <div style="display:flex;align-items:center;justify-content:center;gap:12px;">
+                            <i class="fas fa-magic" style="font-size:1.3rem;"></i>
+                            <span>Create Clips</span>
+                            <i class="fas fa-arrow-right" style="font-size:1rem;"></i>
                         </div>
+                        <div class="btn-create-sub">Powered by Whisper + GPT</div>
                     </div>
-
-                    <!-- Segments -->
-                    <div class="download-item download-card-coral">
-                        <div class="text-center">
-                            <div class="download-icon bg-coral">
-                                <i class="fas fa-list text-white text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">Segments</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Timestamped segments (JSON)</p>
-                            <a id="download-segments" class="brutal-btn-download bg-coral text-white w-full">
-                                <i class="fas fa-download mr-2"></i>Download JSON
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Words -->
-                    <div class="download-item download-card-blue">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-blue">
-                                <i class="fas fa-align-left text-white text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">Word Timestamps</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Individual word timing</p>
-                            <a id="download-words" class="brutal-btn-download bg-electric-blue text-white w-full">
-                                <i class="fas fa-download mr-2"></i>Download JSON
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- SRT -->
-                    <div class="download-item download-card-lime">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-lime">
-                                <i class="fas fa-closed-captioning text-jet text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">SRT Subtitles</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Standard subtitle format</p>
-                            <a id="download-srt" class="brutal-btn-download bg-electric-lime text-jet w-full">
-                                <i class="fas fa-download mr-2"></i>Download SRT
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- VTT -->
-                    <div class="download-item download-card-purple">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-purple">
-                                <i class="fas fa-closed-captioning text-white text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">VTT Subtitles</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Web video subtitle format</p>
-                            <a id="download-vtt" class="brutal-btn-download bg-electric-purple text-white w-full">
-                                <i class="fas fa-download mr-2"></i>Download VTT
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- New Upload Button -->
-            <div class="mt-10 text-center">
-                <button id="new-upload-btn" class="brutal-btn-primary bg-electric-purple py-4 px-10 inline-block">
-                    <i class="fas fa-plus mr-3 text-xl"></i>
-                    <span class="text-lg">CREATE ANOTHER CLIP</span>
                 </button>
             </div>
         </div>
+    </section>
 
-        <!-- Error Section -->
-        <div id="error-section" class="hidden brutal-card bg-white border-4 border-jet shadow-brutal-coral p-6 sm:p-8">
-            <div class="text-center">
-                <div class="mb-6 inline-block">
-                    <div class="bg-coral border-4 border-jet p-5 inline-block shadow-brutal-sm transform rotate-3">
-                        <i class="fas fa-exclamation-triangle text-white text-4xl"></i>
+    <!-- ==================== CHAPTER 4: PROCESSING ==================== -->
+    <section class="chapter processing-chapter" id="progress-section" style="display:none;">
+        <!-- Background blobs for ambient effect -->
+        <div class="blob-container">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+        </div>
+
+        <div class="chapter-content" style="position:relative;z-index:1;text-align:center;">
+            <div class="circular-progress">
+                <div class="circular-progress-ring" id="progress-ring">
+                    <div class="circular-progress-inner">
+                        <div class="circular-progress-percent" id="progress-percent">0%</div>
                     </div>
                 </div>
-                <h3 class="text-2xl sm:text-3xl font-black text-jet uppercase mb-2">Oops! Something Broke</h3>
-                <p id="error-message" class="text-jet font-bold mb-6 bg-red-50 border-3 border-jet p-4 inline-block"></p>
-                <div>
-                    <button id="retry-btn" class="brutal-btn-primary bg-coral py-3 px-8 inline-block">
-                        <i class="fas fa-redo mr-2"></i>
-                        <span>TRY AGAIN</span>
+            </div>
+            <p id="progress-text" class="progress-status-text">Starting upload...</p>
+            <!-- Hidden div for app.js progress-fill compatibility -->
+            <div id="progress-fill" style="width:0%;"></div>
+        </div>
+    </section>
+
+    <!-- ==================== CHAPTER 5: RESULTS ==================== -->
+    <div id="results-section" class="hidden">
+        <section class="chapter chapter-white" style="position:relative;">
+            <!-- Confetti Burst -->
+            <div class="confetti-container" id="confetti-container">
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+                <div class="confetti-piece"></div>
+            </div>
+
+            <div class="chapter-content" style="position:relative;z-index:2;">
+                <!-- Hero moment -->
+                <div style="text-align:center;">
+                    <h2 class="results-hero-text anim-element">Your clips are ready</h2>
+                    <p class="chapter-paragraph anim-element delay-1" style="text-align:center;max-width:500px;margin:0 auto;">
+                        We transcribed your video, picked the best moments, and rendered them as clips.
+                    </p>
+                </div>
+
+                <!-- Final Video Player -->
+                <div id="final-video-card" class="hidden">
+                    <div class="cinematic-frame anim-scale delay-2">
+                        <div class="letterbox-bar letterbox-top"></div>
+                        <video id="final-video" controls playsinline></video>
+                        <div class="letterbox-bar letterbox-bottom"></div>
+                    </div>
+                    <div style="text-align:center;">
+                        <a id="download-final" class="btn-download-primary" download>
+                            <i class="fas fa-download"></i>
+                            <span>Download Final Clip</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Download Strip (Film Reel) -->
+                <div class="film-reel">
+                    <!-- Transcript -->
+                    <div class="film-card download-item">
+                        <div class="film-card-icon" style="background:#eef2ff;color:#6366f1;">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="film-card-title">Full Transcript</div>
+                        <div class="film-card-desc">Complete text transcript</div>
+                        <a id="download-txt" class="btn-download" href="#">
+                            <i class="fas fa-download"></i>
+                            <span>Download TXT</span>
+                        </a>
+                    </div>
+
+                    <!-- Segments -->
+                    <div class="film-card download-item">
+                        <div class="film-card-icon" style="background:#fef2f2;color:#ef4444;">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <div class="film-card-title">Segments</div>
+                        <div class="film-card-desc">Timestamped segments (JSON)</div>
+                        <a id="download-segments" class="btn-download" href="#">
+                            <i class="fas fa-download"></i>
+                            <span>Download JSON</span>
+                        </a>
+                    </div>
+
+                    <!-- Words -->
+                    <div class="film-card download-item">
+                        <div class="film-card-icon" style="background:#eff6ff;color:#3b82f6;">
+                            <i class="fas fa-align-left"></i>
+                        </div>
+                        <div class="film-card-title">Word Timestamps</div>
+                        <div class="film-card-desc">Individual word timing</div>
+                        <a id="download-words" class="btn-download" href="#">
+                            <i class="fas fa-download"></i>
+                            <span>Download JSON</span>
+                        </a>
+                    </div>
+
+                    <!-- SRT -->
+                    <div class="film-card download-item">
+                        <div class="film-card-icon" style="background:#ecfdf5;color:#10b981;">
+                            <i class="fas fa-closed-captioning"></i>
+                        </div>
+                        <div class="film-card-title">SRT Subtitles</div>
+                        <div class="film-card-desc">Standard subtitle format</div>
+                        <a id="download-srt" class="btn-download" href="#">
+                            <i class="fas fa-download"></i>
+                            <span>Download SRT</span>
+                        </a>
+                    </div>
+
+                    <!-- VTT -->
+                    <div class="film-card download-item">
+                        <div class="film-card-icon" style="background:#f5f3ff;color:#8b5cf6;">
+                            <i class="fas fa-closed-captioning"></i>
+                        </div>
+                        <div class="film-card-title">VTT Subtitles</div>
+                        <div class="film-card-desc">Web video subtitle format</div>
+                        <a id="download-vtt" class="btn-download" href="#">
+                            <i class="fas fa-download"></i>
+                            <span>Download VTT</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Job Info -->
+                <div class="job-info-card">
+                    <div>
+                        <div class="job-info-label">Job ID</div>
+                        <div id="job-id" class="job-info-value"></div>
+                    </div>
+                    <div>
+                        <div class="job-info-label">Status</div>
+                        <div id="job-status" class="job-info-value" style="color:#10b981;">
+                            <i class="fas fa-check-circle" style="margin-right:6px;"></i>Completed
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Start Over -->
+                <div style="text-align:center;">
+                    <button id="new-upload-btn" class="btn-start-over">
+                        <i class="fas fa-redo"></i>
+                        <span>Start Over</span>
                     </button>
                 </div>
             </div>
-        </div>
-    </main>
+        </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-jet border-t-4 border-jet mt-16">
-        <!-- Footer Marquee -->
-        <div class="marquee-strip bg-electric-yellow border-b-4 border-jet overflow-hidden py-1">
-            <div class="marquee-content animate-marquee whitespace-nowrap">
-                <span class="inline-block mx-8 text-jet font-black text-xs tracking-widest uppercase">
-                    CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM
-                </span>
-            </div>
-        </div>
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div class="text-center">
-                <div class="flex items-center justify-center mb-6">
-                    <div class="bg-electric-yellow border-4 border-cream-100 px-5 py-2 transform -rotate-2">
-                        <h3 class="text-2xl font-black text-jet uppercase">
-                            <i class="fas fa-seedling mr-2"></i>ClipFarm
-                        </h3>
+    <!-- ==================== ERROR SECTION ==================== -->
+    <div id="error-section" class="hidden">
+        <section class="chapter chapter-gray">
+            <div class="chapter-content">
+                <div class="error-card">
+                    <div class="error-icon">
+                        <i class="fas fa-exclamation-triangle" style="color:#ef4444;"></i>
                     </div>
-                </div>
-                <p class="text-cream-100 font-bold text-lg mb-6">Turn long videos into scroll-stopping shorts with captions</p>
-
-                <!-- Tech Stickers -->
-                <div class="flex flex-wrap items-center justify-center gap-3 mb-8">
-                    <div class="footer-sticker bg-electric-purple transform -rotate-2">
-                        <i class="fas fa-brain mr-1"></i> Whisper
+                    <h3 class="error-title">Something went wrong</h3>
+                    <p id="error-message" class="error-message-text"></p>
+                    <div>
+                        <button id="retry-btn" class="btn-retry">
+                            <i class="fas fa-redo"></i>
+                            <span>Try Again</span>
+                        </button>
                     </div>
-                    <div class="footer-sticker bg-electric-blue transform rotate-1">
-                        <i class="fas fa-robot mr-1"></i> GPT
-                    </div>
-                    <div class="footer-sticker bg-coral transform -rotate-1">
-                        <i class="fas fa-film mr-1"></i> FFmpeg
-                    </div>
-                    <div class="footer-sticker bg-electric-lime text-jet transform rotate-2">
-                        <i class="fas fa-code mr-1"></i> FastAPI
-                    </div>
-                    <div class="footer-sticker bg-electric-yellow text-jet transform -rotate-3">
-                        <i class="fas fa-server mr-1"></i> Node.js
-                    </div>
-                </div>
-
-                <div class="border-t-3 border-cream-200 border-opacity-20 pt-6">
-                    <p class="text-cream-200 font-bold text-sm opacity-60">&copy; 2024 ClipFarm. All rights reserved.</p>
                 </div>
             </div>
-        </div>
-    </footer>
+        </section>
+    </div>
 
     <script src="/js/app.js"></script>
+
+    <!-- Scroll-Triggered Animations & Circular Progress Sync -->
+    <script>
+    (function() {
+        // IntersectionObserver for scroll animations
+        const chapters = document.querySelectorAll('.chapter');
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, { threshold: 0.15 });
+        chapters.forEach(function(ch) { observer.observe(ch); });
+
+        // Nav pill show/hide on scroll
+        var pill = document.getElementById('nav-pill');
+        var lastScroll = 0;
+        window.addEventListener('scroll', function() {
+            var y = window.scrollY;
+            if (y > 300) {
+                pill.classList.add('visible');
+            } else {
+                pill.classList.remove('visible');
+            }
+            lastScroll = y;
+        }, { passive: true });
+
+        // Sync circular progress with #progress-fill width
+        var progressFill = document.getElementById('progress-fill');
+        var progressRing = document.getElementById('progress-ring');
+        var progressPercent = document.getElementById('progress-percent');
+        var progressSection = document.getElementById('progress-section');
+
+        var pObserver = new MutationObserver(function() {
+            var w = parseFloat(progressFill.style.width) || 0;
+            progressRing.style.background = 'conic-gradient(#6366f1 ' + (w * 3.6) + 'deg, rgba(255,255,255,0.1) ' + (w * 3.6) + 'deg)';
+            progressPercent.textContent = Math.round(w) + '%';
+        });
+        pObserver.observe(progressFill, { attributes: true, attributeFilter: ['style'] });
+
+        // Override hidden class for progress section (uses display:none)
+        var psObserver = new MutationObserver(function() {
+            var hasHidden = progressSection.classList.contains('hidden');
+            progressSection.style.display = hasHidden ? 'none' : 'flex';
+        });
+        psObserver.observe(progressSection, { attributes: true, attributeFilter: ['class'] });
+
+        // Replay confetti when results become visible
+        var resultsSection = document.getElementById('results-section');
+        var rsObserver = new MutationObserver(function() {
+            if (!resultsSection.classList.contains('hidden')) {
+                var container = document.getElementById('confetti-container');
+                if (container) {
+                    var clone = container.cloneNode(true);
+                    container.parentNode.replaceChild(clone, container);
+                }
+            }
+        });
+        rsObserver.observe(resultsSection, { attributes: true, attributeFilter: ['class'] });
+    })();
+    </script>
 </body>
 </html>

@@ -7,94 +7,99 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        cream: {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
+        indigo: {
+          DEFAULT: '#6366f1',
+          50: '#eef2ff',
+          100: '#e0e7ff',
+          500: '#6366f1',
+          600: '#4f46e5',
+          700: '#4338ca',
         },
-        jet: '#0f0f0f',
-        coral: {
-          DEFAULT: '#ff6b6b',
-          light: '#ff9a9a',
-          dark: '#e85555',
+        jet: '#000000',
+        gray: {
+          50: '#f9fafb',
+          100: '#f3f4f6',
+          200: '#e5e7eb',
+          300: '#d1d5db',
+          400: '#9ca3af',
+          500: '#6b7280',
+          600: '#4b5563',
+          700: '#374151',
+          800: '#1f2937',
+          900: '#111827',
         },
-        electric: {
-          yellow: '#facc15',
-          blue: '#3b82f6',
-          lime: '#84cc16',
-          purple: '#a855f7',
-        },
-      },
-      boxShadow: {
-        'brutal': '8px 8px 0px #0f0f0f',
-        'brutal-sm': '4px 4px 0px #0f0f0f',
-        'brutal-lg': '12px 12px 0px #0f0f0f',
-        'brutal-hover': '4px 4px 0px #0f0f0f',
-        'brutal-active': '0px 0px 0px #0f0f0f',
-        'brutal-yellow': '8px 8px 0px #facc15',
-        'brutal-coral': '8px 8px 0px #ff6b6b',
-        'brutal-blue': '8px 8px 0px #3b82f6',
-        'brutal-lime': '8px 8px 0px #84cc16',
-        'brutal-purple': '8px 8px 0px #a855f7',
-        'brutal-inverse': '-4px -4px 0px #0f0f0f',
-      },
-      borderWidth: {
-        '3': '3px',
-        '4': '4px',
       },
       fontFamily: {
-        'brutal': ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+      },
+      fontSize: {
+        'hero': 'clamp(3rem, 8vw, 6rem)',
+        'chapter': 'clamp(2rem, 5vw, 3.5rem)',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
+        '26': '6.5rem',
+        '30': '7.5rem',
+        '34': '8.5rem',
+        '128': '32rem',
+      },
+      borderRadius: {
+        '3xl': '1.5rem',
+        '4xl': '2rem',
       },
       animation: {
-        'wobble': 'wobble 0.5s ease-in-out',
-        'bounce-in': 'bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-        'slide-up': 'slideUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
-        'sticker-peel': 'stickerPeel 0.3s ease-out',
-        'marquee': 'marquee 20s linear infinite',
+        'gradient-text': 'gradientShift 8s ease infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'float-delayed': 'float 6s ease-in-out 2s infinite',
+        'float-slow': 'float 8s ease-in-out 1s infinite',
+        'bounce-gentle': 'bounceGentle 2s ease-in-out infinite',
+        'slide-up': 'slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'slide-left': 'slideLeft 0.8s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'slide-right': 'slideRight 0.8s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'fade-in': 'fadeIn 0.6s ease-out both',
+        'scale-in': 'scaleIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'confetti': 'confetti 1.5s ease-out forwards',
         'spin-slow': 'spin 3s linear infinite',
-        'wiggle': 'wiggle 2.5s ease-in-out infinite',
-        'pop': 'pop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
       },
       keyframes: {
-        wobble: {
-          '0%, 100%': { transform: 'rotate(0deg)' },
-          '25%': { transform: 'rotate(-2deg)' },
-          '75%': { transform: 'rotate(2deg)' },
+        gradientShift: {
+          '0%, 100%': { 'background-position': '0% 50%' },
+          '50%': { 'background-position': '100% 50%' },
         },
-        bounceIn: {
-          '0%': { transform: 'scale(0.3)', opacity: '0' },
-          '50%': { transform: 'scale(1.05)' },
-          '70%': { transform: 'scale(0.9)' },
-          '100%': { transform: 'scale(1)', opacity: '1' },
+        float: {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '33%': { transform: 'translate(30px, -30px)' },
+          '66%': { transform: 'translate(-20px, 20px)' },
+        },
+        bounceGentle: {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(12px)' },
         },
         slideUp: {
-          '0%': { transform: 'translateY(30px)', opacity: '0' },
+          '0%': { transform: 'translateY(60px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
-        stickerPeel: {
-          '0%': { transform: 'perspective(800px) rotateY(0deg)' },
-          '100%': { transform: 'perspective(800px) rotateY(-10deg)' },
+        slideLeft: {
+          '0%': { transform: 'translateX(-60px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
         },
-        marquee: {
-          '0%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-50%)' },
+        slideRight: {
+          '0%': { transform: 'translateX(60px)', opacity: '0' },
+          '100%': { transform: 'translateX(0)', opacity: '1' },
         },
-        wiggle: {
-          '0%, 100%': { transform: 'rotate(-1deg)' },
-          '50%': { transform: 'rotate(1deg)' },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
-        pop: {
-          '0%': { transform: 'scale(0.8)', opacity: '0' },
-          '80%': { transform: 'scale(1.1)' },
+        scaleIn: {
+          '0%': { transform: 'scale(0.9)', opacity: '0' },
           '100%': { transform: 'scale(1)', opacity: '1' },
         },
-      },
-      rotate: {
-        '-2': '-2deg',
-        '-1': '-1deg',
-        '1': '1deg',
-        '2': '2deg',
-        '3': '3deg',
+        confetti: {
+          '0%': { transform: 'translateY(0) rotate(0deg)', opacity: '1' },
+          '100%': { transform: 'translateY(-200px) rotate(720deg)', opacity: '0' },
+        },
       },
     },
   },
