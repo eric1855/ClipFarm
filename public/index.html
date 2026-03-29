@@ -6,466 +6,313 @@
     <title>ClipFarm - AI Video Clip Extractor</title>
     <link href="/css/output.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="bg-cream-50 min-h-screen font-brutal noise-bg">
-
-    <!-- Decorative Marquee Strip -->
-    <div class="marquee-strip bg-electric-yellow border-b-4 border-jet overflow-hidden py-2">
-        <div class="marquee-content animate-marquee whitespace-nowrap">
-            <span class="inline-block mx-8 text-jet font-black text-sm tracking-widest uppercase">
-                <i class="fas fa-scissors mr-2"></i> CLIP IT <i class="fas fa-star mx-4"></i> FARM IT <i class="fas fa-bolt mx-4"></i> SHIP IT <i class="fas fa-fire mx-4"></i> AI POWERED <i class="fas fa-star mx-4"></i> WHISPER + GPT <i class="fas fa-bolt mx-4"></i> EXTRACT CLIPS <i class="fas fa-fire mx-4"></i> AUTO CAPTIONS <i class="fas fa-scissors mx-4"></i> CLIP IT <i class="fas fa-star mx-4"></i> FARM IT <i class="fas fa-bolt mx-4"></i> SHIP IT <i class="fas fa-fire mx-4"></i> AI POWERED <i class="fas fa-star mx-4"></i> WHISPER + GPT <i class="fas fa-bolt mx-4"></i> EXTRACT CLIPS <i class="fas fa-fire mx-4"></i> AUTO CAPTIONS
-            </span>
-        </div>
-    </div>
+<body>
 
     <!-- Header -->
-    <header class="bg-white border-b-4 border-jet sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center gap-4">
-                    <!-- Logo Badge -->
-                    <div class="logo-badge bg-electric-yellow border-4 border-jet shadow-brutal-sm px-4 py-2 inline-block transform -rotate-2 hover:rotate-1 transition-transform">
-                        <h1 class="text-2xl sm:text-3xl font-black text-jet tracking-tight uppercase">
-                            <i class="fas fa-seedling mr-1"></i> ClipFarm
-                        </h1>
-                    </div>
-                    <p class="hidden sm:block text-jet font-bold text-sm uppercase tracking-wide mt-1">AI Clip Extractor</p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <!-- AI Badge -->
-                    <div class="hidden sm:block bg-coral border-3 border-jet text-white font-black text-xs uppercase px-3 py-1 transform rotate-2 shadow-brutal-sm">
-                        AI Powered <i class="fas fa-robot ml-1"></i>
-                    </div>
-                    <div id="connection-status" class="flex items-center px-4 py-2 bg-cream-100 border-3 border-jet shadow-brutal-sm">
-                        <div class="w-3 h-3 bg-gray-400 border-2 border-jet rounded-full mr-2 animate-pulse"></div>
-                        <span class="text-sm text-jet font-bold">Checking...</span>
-                    </div>
-                </div>
-            </div>
+    <header class="bento-header">
+        <span class="bento-wordmark">ClipFarm</span>
+        <div id="connection-status" style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:0.75rem;color:#9ca3af;font-weight:500;">Checking...</span>
+            <div class="status-dot"></div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+    <!-- ============================================
+         UPLOAD STATE — Hero Bento Grid
+         ============================================ -->
+    <main>
+        <div class="bento-grid" id="upload-grid">
 
-        <!-- Hero Section -->
-        <div class="text-center mb-10 relative">
-            <div class="inline-block relative">
-                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black text-jet uppercase leading-tight">
-                    Turn Long Videos<br>
-                    <span class="wavy-underline">Into Viral Clips</span>
-                </h2>
-                <!-- Decorative "NEW" sticker -->
-                <div class="absolute -top-4 -right-8 sm:-right-12 bg-coral text-white font-black text-xs uppercase px-3 py-1 rounded-full border-3 border-jet shadow-brutal-sm transform rotate-12 animate-wiggle">
-                    NEW!
+            <!-- 1. Upload Drop Zone (2 col x 2 row) -->
+            <div class="tile tile-upload upload-zone" id="upload-area">
+                <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="17 8 12 3 7 8"/>
+                    <line x1="12" y1="3" x2="12" y2="15"/>
+                </svg>
+                <div class="upload-title">Drop video here</div>
+                <div class="upload-subtitle">or click to browse</div>
+                <div class="format-dots">
+                    <span class="format-dot" style="background:#f59e0b"></span>
+                    <span class="format-dot" style="background:#6366f1"></span>
+                    <span class="format-dot" style="background:#ec4899"></span>
+                    <span class="format-dot" style="background:#10b981"></span>
+                    <span class="format-dot" style="background:#3b82f6"></span>
                 </div>
-            </div>
-            <p class="text-lg sm:text-xl text-jet font-bold mt-4 max-w-xl mx-auto transform -rotate-1">
-                Upload. Transcribe. Extract. Download. <span class="bg-electric-yellow px-2 border-b-3 border-jet">It's that easy.</span>
-            </p>
-        </div>
-
-        <!-- Upload Section Card -->
-        <div class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-
-            <!-- Section Header -->
-            <div class="flex items-center mb-6 gap-3">
-                <div class="step-number bg-electric-lime border-4 border-jet w-12 h-12 flex items-center justify-center shadow-brutal-sm transform -rotate-3">
-                    <span class="text-2xl font-black text-jet">1</span>
-                </div>
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-jet uppercase">Upload Your Video</h2>
-                    <p class="text-jet font-bold text-sm">Drop a file and let the AI do its thing</p>
-                </div>
-                <!-- Sticker -->
-                <div class="hidden md:block ml-auto bg-electric-blue text-white font-black text-xs uppercase px-3 py-1 border-3 border-jet shadow-brutal-sm transform rotate-3">
-                    <i class="fas fa-magic mr-1"></i> Auto-Magic
-                </div>
+                <div class="format-label">MP4, AVI, MOV, WAV, MP3, M4A</div>
+                <input type="file" id="file-input" class="hidden" accept=".mp4,.avi,.mov,.mkv,.wav,.mp3,.m4a,.flac,.ogg">
             </div>
 
-            <!-- File Upload Area -->
-            <div id="upload-area" class="upload-area mb-6 group cursor-pointer">
-                <div class="upload-content text-center">
-                    <div class="mb-6 inline-block">
-                        <div class="bg-electric-yellow border-4 border-jet p-6 shadow-brutal-sm inline-block transform group-hover:-rotate-3 transition-transform duration-200">
-                            <i class="fas fa-cloud-upload-alt text-5xl sm:text-6xl text-jet"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-black text-jet uppercase mb-2">Drop Your File Here</h3>
-                    <p class="text-jet font-bold mb-5">or click to browse your computer</p>
-                    <div class="flex flex-wrap justify-center gap-2 mb-5">
-                        <span class="file-badge bg-electric-yellow">MP4</span>
-                        <span class="file-badge bg-electric-lime">AVI</span>
-                        <span class="file-badge bg-electric-purple text-white">MOV</span>
-                        <span class="file-badge bg-coral text-white">WAV</span>
-                        <span class="file-badge bg-electric-blue text-white">MP3</span>
-                        <span class="file-badge bg-cream-200">M4A</span>
-                    </div>
-                    <div class="inline-block bg-cream-100 border-3 border-jet px-4 py-2 shadow-brutal-sm">
-                        <p class="text-sm text-jet font-bold">
-                            <i class="fas fa-info-circle mr-2"></i>
-                            Maximum file size: 100MB
-                        </p>
-                    </div>
-                    <input type="file" id="file-input" class="hidden" accept=".mp4,.avi,.mov,.mkv,.wav,.mp3,.m4a,.flac,.ogg">
-                </div>
-            </div>
+            <!-- 2. Processing Options (1 col x 2 row) -->
+            <div class="tile tile-options">
+                <div class="tile-label">Processing</div>
 
-            <!-- Selected File Info -->
-            <div id="file-info" class="hidden mb-6 bg-electric-lime border-4 border-jet shadow-brutal p-5">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="bg-jet p-3 border-3 border-jet">
-                            <i class="fas fa-file-video text-electric-yellow text-2xl"></i>
-                        </div>
+                <div class="option-group">
+                    <label class="option-label" for="model-select">Whisper Model</label>
+                    <select id="model-select" class="option-select">
+                        <option value="tiny">Tiny (Fastest)</option>
+                        <option value="base">Base</option>
+                        <option value="small" selected>Small (Recommended)</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large (Most Accurate)</option>
+                        <option value="large-v2">Large v2</option>
+                        <option value="large-v3">Large v3</option>
+                    </select>
+                </div>
+
+                <div class="option-group">
+                    <label class="option-label" for="language-select">Language</label>
+                    <select id="language-select" class="option-select">
+                        <option value="">Auto-detect</option>
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="it">Italian</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="ru">Russian</option>
+                        <option value="ja">Japanese</option>
+                        <option value="ko">Korean</option>
+                        <option value="zh">Chinese</option>
+                    </select>
+                </div>
+
+                <div class="option-group">
+                    <label class="option-label" for="compute-type">Compute</label>
+                    <select id="compute-type" class="option-select">
+                        <option value="int8_float16">GPU Optimized</option>
+                        <option value="int8">CPU Only</option>
+                        <option value="float16">GPU High Precision</option>
+                    </select>
+                </div>
+
+                <div class="option-group">
+                    <label class="option-checkbox-wrap" for="vad-filter">
+                        <input type="checkbox" id="vad-filter">
                         <div>
-                            <p id="file-name" class="font-black text-jet text-lg uppercase"></p>
-                            <p id="file-size" class="text-sm text-jet font-bold"></p>
-                            <div class="flex items-center mt-1">
-                                <div class="w-3 h-3 bg-jet rounded-full mr-2"></div>
-                                <span class="text-xs text-jet font-black uppercase">Ready to process</span>
-                            </div>
+                            <div class="option-checkbox-label">Voice Detection</div>
+                            <div class="option-checkbox-desc">Filter out silence</div>
                         </div>
-                    </div>
-                    <button id="remove-file" class="bg-coral border-3 border-jet text-white p-2 shadow-brutal-sm hover:shadow-brutal-active hover:translate-x-1 hover:translate-y-1 transition-all">
-                        <i class="fas fa-times text-lg"></i>
-                    </button>
+                    </label>
                 </div>
             </div>
 
-            <!-- Processing Options -->
-            <div class="bg-cream-100 border-4 border-jet p-6 mb-6 shadow-brutal-sm">
-                <div class="flex items-center mb-5 gap-3">
-                    <div class="step-number bg-coral text-white border-4 border-jet w-12 h-12 flex items-center justify-center shadow-brutal-sm transform rotate-2">
-                        <span class="text-2xl font-black">2</span>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-black text-jet uppercase">Processing Options</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label for="model-select" class="block text-sm font-black text-jet mb-2 uppercase tracking-wide">
-                            <i class="fas fa-brain text-electric-purple mr-2"></i>
-                            Whisper Model
-                        </label>
-                        <select id="model-select" class="brutal-select w-full">
-                            <option value="tiny">Tiny (Fastest)</option>
-                            <option value="base">Base</option>
-                            <option value="small" selected>Small (Recommended)</option>
-                            <option value="medium">Medium</option>
-                            <option value="large">Large (Most Accurate)</option>
-                            <option value="large-v2">Large v2</option>
-                            <option value="large-v3">Large v3</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="language-select" class="block text-sm font-black text-jet mb-2 uppercase tracking-wide">
-                            <i class="fas fa-globe text-electric-lime mr-2"></i>
-                            Language
-                        </label>
-                        <select id="language-select" class="brutal-select w-full">
-                            <option value="">Auto-detect</option>
-                            <option value="en">English</option>
-                            <option value="es">Spanish</option>
-                            <option value="fr">French</option>
-                            <option value="de">German</option>
-                            <option value="it">Italian</option>
-                            <option value="pt">Portuguese</option>
-                            <option value="ru">Russian</option>
-                            <option value="ja">Japanese</option>
-                            <option value="ko">Korean</option>
-                            <option value="zh">Chinese</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="compute-type" class="block text-sm font-black text-jet mb-2 uppercase tracking-wide">
-                            <i class="fas fa-microchip text-coral mr-2"></i>
-                            Compute Type
-                        </label>
-                        <select id="compute-type" class="brutal-select w-full">
-                            <option value="int8_float16">GPU Optimized</option>
-                            <option value="int8">CPU Only</option>
-                            <option value="float16">GPU High Precision</option>
-                        </select>
-                    </div>
-
-                    <div class="flex items-center justify-center">
-                        <div class="bg-white p-4 border-4 border-jet shadow-brutal-sm w-full">
-                            <label for="vad-filter" class="flex items-center cursor-pointer">
-                                <input type="checkbox" id="vad-filter" class="brutal-checkbox mr-3 w-6 h-6 accent-electric-yellow">
-                                <div>
-                                    <div class="text-sm font-black text-jet uppercase">
-                                        <i class="fas fa-volume-up text-electric-blue mr-2"></i>
-                                        Voice Detection
-                                    </div>
-                                    <div class="text-xs text-jet font-bold">Filter out silence</div>
-                                </div>
-                            </label>
-                        </div>
-                    </div>
+            <!-- 3. File Info (1 col x 1 row) — hidden until file selected -->
+            <div class="tile tile-file-info hidden" id="file-info">
+                <div class="file-info-inner">
+                    <div class="tile-label">Selected File</div>
+                    <p class="file-info-name" id="file-name"></p>
+                    <p class="file-info-size" id="file-size"></p>
+                    <div class="file-info-status">Ready to process</div>
+                    <button class="file-remove-btn" id="remove-file">Remove</button>
                 </div>
             </div>
 
-            <!-- Optional Instructions -->
-            <div class="bg-white border-4 border-jet p-6 mb-6 shadow-brutal-sm">
-                <div class="flex items-center mb-4 gap-2">
-                    <i class="fas fa-bullseye text-electric-purple text-xl"></i>
-                    <h4 class="text-lg font-black text-jet uppercase">Optional Instructions</h4>
-                    <div class="ml-auto bg-electric-purple text-white font-black text-xs uppercase px-2 py-1 border-2 border-jet transform -rotate-2">
-                        Pro Tip
-                    </div>
-                </div>
-                <textarea id="instructions-input" rows="3" class="brutal-input w-full p-3" placeholder="Tell the clip selector what to do (e.g., 'Prefer definitions', 'Keep first sentence', 'Avoid sponsor mentions')"></textarea>
+            <!-- 3b. Decorative tile (shown when no file, hidden when file selected) -->
+            <div class="tile tile-file-info tile-deco-gradient" id="deco-placeholder"></div>
+
+            <!-- 4. Instructions (2 col x 1 row) -->
+            <div class="tile tile-instructions">
+                <div class="tile-label">Instructions (Optional)</div>
+                <textarea id="instructions-input" class="instructions-area" rows="3" placeholder="e.g., 'Prefer definitions', 'Keep first sentence', 'Avoid sponsor mentions'"></textarea>
             </div>
 
-            <!-- Thick Divider -->
-            <div class="border-t-4 border-jet border-dashed my-6"></div>
+            <!-- 5. Powered By (1 col x 1 row) -->
+            <div class="tile tile-powered">
+                <div class="powered-label">Powered by</div>
+                <div class="powered-text">OpenAI Whisper for transcription. GPT for intelligent clip selection. FFmpeg for rendering.</div>
+            </div>
 
-            <!-- Upload Button -->
-            <button id="upload-btn" class="brutal-btn-primary w-full py-5 px-6" disabled>
-                <div class="flex items-center justify-center gap-3">
-                    <i class="fas fa-magic text-2xl"></i>
-                    <span class="text-xl">CREATE CLIPS</span>
-                    <i class="fas fa-arrow-right text-xl"></i>
-                </div>
-                <div class="text-sm font-bold mt-1 opacity-80">Powered by Whisper + GPT</div>
+            <!-- 6. Create Clips (1 col x 1 row) — the tile IS the button -->
+            <button class="tile tile-action tile-action-btn" id="upload-btn" disabled>
+                <div class="action-title">Create Clips</div>
+                <div class="action-sub">Whisper + GPT</div>
             </button>
+
+            <!-- 7. Decorative Mesh (1 col x 1 row) -->
+            <div class="tile tile-decorative tile-deco-mesh"></div>
+
         </div>
 
-        <!-- Progress Section -->
-        <div id="progress-section" class="hidden brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-            <div class="text-center">
-                <div class="mb-6 inline-block">
-                    <div class="bg-electric-blue border-4 border-jet p-5 inline-block shadow-brutal-sm animate-wiggle">
-                        <div class="loading-spinner"></div>
+        <!-- ============================================
+             PROGRESS STATE
+             ============================================ -->
+        <div id="progress-section" class="hidden">
+            <div class="bento-grid progress-overlay">
+                <div class="tile tile-upload tile-progress">
+                    <div class="progress-spinner"></div>
+                    <div class="progress-title">Finding the best clips</div>
+                    <p class="progress-status" id="progress-text">Starting upload...</p>
+                    <div class="progress-bar-track">
+                        <div class="progress-bar-fill" id="progress-fill" style="width: 0%"></div>
                     </div>
+                    <div class="progress-hint">This may take a few minutes</div>
                 </div>
-                <h3 class="text-2xl sm:text-3xl font-black text-jet uppercase mb-2">Finding the Best Clips</h3>
-                <p id="progress-text" class="text-jet font-bold mb-6">Transcribing, selecting moments, preparing downloads...</p>
-                <div class="progress-brutal bg-cream-100 border-4 border-jet h-8 overflow-hidden relative">
-                    <div id="progress-fill" class="h-full bg-electric-yellow transition-all duration-500 ease-out relative" style="width: 0%">
-                        <div class="progress-stripes absolute inset-0"></div>
-                    </div>
-                </div>
-                <p class="text-sm text-jet font-bold mt-4 bg-cream-100 border-3 border-jet inline-block px-4 py-2 shadow-brutal-sm">
-                    <i class="fas fa-clock mr-2"></i> This may take a few minutes
-                </p>
+
+                <!-- Dimmed / blurred tiles during progress -->
+                <div class="tile tile-options" style="opacity:0.15;filter:blur(3px);pointer-events:none;min-height:200px;"></div>
+                <div class="tile tile-deco-gradient" style="opacity:0.1;filter:blur(3px);pointer-events:none;"></div>
+                <div class="tile tile-instructions" style="opacity:0.1;filter:blur(3px);pointer-events:none;min-height:60px;"></div>
+                <div class="tile tile-powered" style="opacity:0.1;filter:blur(3px);pointer-events:none;"></div>
+                <div class="tile tile-action" style="opacity:0.1;filter:blur(3px);pointer-events:none;min-height:80px;"></div>
+                <div class="tile tile-decorative tile-deco-mesh" style="opacity:0.1;filter:blur(3px);pointer-events:none;"></div>
             </div>
         </div>
 
-        <!-- Results Section -->
+        <!-- ============================================
+             RESULTS STATE
+             ============================================ -->
         <div id="results-section" class="hidden">
-            <!-- Final Clip Player -->
-            <div id="final-video-card" class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8 hidden">
-                <div class="flex items-center mb-4 gap-2">
-                    <div class="bg-electric-purple border-3 border-jet p-2 shadow-brutal-sm">
-                        <i class="fas fa-film text-white text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-black text-jet uppercase">Final Clip (Chronological)</h4>
-                </div>
-                <div class="border-4 border-jet overflow-hidden shadow-brutal-sm">
-                    <video id="final-video" class="w-full bg-black" controls playsinline></video>
-                </div>
-                <div class="mt-4">
-                    <a id="download-final" class="brutal-btn-small bg-electric-purple text-white inline-flex items-center" download>
-                        <i class="fas fa-download mr-2"></i>Download Final Clip
-                    </a>
-                </div>
-            </div>
+            <div class="results-grid">
 
-            <!-- Success Header -->
-            <div class="text-center mb-8">
-                <div class="mb-4 inline-block">
-                    <div class="bg-electric-lime border-4 border-jet p-5 inline-block shadow-brutal-sm transform -rotate-2">
-                        <i class="fas fa-check text-jet text-4xl"></i>
+                <!-- Final Video Player (2 col x 2 row) -->
+                <div class="tile tile-video hidden" id="final-video-card">
+                    <div class="tile-label">Final Clip</div>
+                    <div class="video-wrapper">
+                        <video id="final-video" controls playsinline></video>
+                    </div>
+                    <div style="margin-top:16px;">
+                        <a id="download-final" class="btn-secondary" download style="text-decoration:none;">
+                            <i class="fas fa-download" style="font-size:0.75rem;"></i> Download Final
+                        </a>
                     </div>
                 </div>
-                <h3 class="text-3xl sm:text-4xl font-black text-jet uppercase mb-2">Your Clips Are Ready!</h3>
-                <p class="text-jet font-bold text-lg">We generated captions and candidate short-form videos</p>
-                <div class="inline-block bg-electric-yellow border-3 border-jet px-4 py-1 mt-3 shadow-brutal-sm transform rotate-1 font-black text-sm uppercase">
-                    Fresh off the farm
-                </div>
-            </div>
 
-            <!-- Job Info -->
-            <div class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-                <div class="flex items-center mb-5 gap-2">
-                    <div class="bg-electric-blue border-3 border-jet p-2 shadow-brutal-sm">
-                        <i class="fas fa-info-circle text-white text-xl"></i>
+                <!-- Download: Transcript -->
+                <a class="tile tile-download download-item" id="download-txt" data-accent="peach" href="#">
+                    <div class="dl-file-type">
+                        <span class="dl-dot" style="background:#f59e0b;"></span>
+                        <span class="dl-name">Transcript</span>
                     </div>
-                    <h4 class="text-xl font-black text-jet uppercase">Job Information</h4>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="bg-blue-50 p-4 border-3 border-jet">
-                        <span class="text-sm font-black text-jet uppercase">Job ID</span>
-                        <p id="job-id" class="text-sm text-jet font-mono bg-white p-2 border-2 border-jet mt-2"></p>
-                    </div>
-                    <div class="bg-green-50 p-4 border-3 border-jet">
-                        <span class="text-sm font-black text-jet uppercase">Status</span>
-                        <p id="job-status" class="text-sm text-jet font-black mt-2 flex items-center uppercase">
-                            <i class="fas fa-check-circle mr-2"></i>Completed Successfully
-                        </p>
-                    </div>
-                </div>
-            </div>
+                    <span class="dl-desc">Full text transcript (.txt)</span>
+                    <span class="dl-action">
+                        <i class="fas fa-arrow-down" style="font-size:0.625rem;"></i> Download
+                    </span>
+                </a>
 
-            <!-- Download Files -->
-            <div class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-                <div class="flex items-center mb-6 gap-2">
-                    <div class="step-number bg-electric-yellow border-4 border-jet w-12 h-12 flex items-center justify-center shadow-brutal-sm transform rotate-3">
-                        <span class="text-2xl font-black text-jet">3</span>
+                <!-- Download: Segments -->
+                <a class="tile tile-download download-item" id="download-segments" data-accent="rose" href="#">
+                    <div class="dl-file-type">
+                        <span class="dl-dot" style="background:#f43f5e;"></span>
+                        <span class="dl-name">Segments</span>
                     </div>
-                    <h4 class="text-2xl font-black text-jet uppercase">Download Your Files</h4>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    <!-- Transcript -->
-                    <div class="download-item download-card-yellow">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-yellow">
-                                <i class="fas fa-file-alt text-jet text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">Full Transcript</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Complete text transcript</p>
-                            <a id="download-txt" class="brutal-btn-download bg-electric-yellow text-jet w-full">
-                                <i class="fas fa-download mr-2"></i>Download TXT
-                            </a>
-                        </div>
-                    </div>
+                    <span class="dl-desc">Timestamped segments (.json)</span>
+                    <span class="dl-action">
+                        <i class="fas fa-arrow-down" style="font-size:0.625rem;"></i> Download
+                    </span>
+                </a>
 
-                    <!-- Segments -->
-                    <div class="download-item download-card-coral">
-                        <div class="text-center">
-                            <div class="download-icon bg-coral">
-                                <i class="fas fa-list text-white text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">Segments</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Timestamped segments (JSON)</p>
-                            <a id="download-segments" class="brutal-btn-download bg-coral text-white w-full">
-                                <i class="fas fa-download mr-2"></i>Download JSON
-                            </a>
-                        </div>
+                <!-- Download: Words -->
+                <a class="tile tile-download download-item" id="download-words" data-accent="sky" href="#">
+                    <div class="dl-file-type">
+                        <span class="dl-dot" style="background:#3b82f6;"></span>
+                        <span class="dl-name">Word Timestamps</span>
                     </div>
+                    <span class="dl-desc">Per-word timing (.json)</span>
+                    <span class="dl-action">
+                        <i class="fas fa-arrow-down" style="font-size:0.625rem;"></i> Download
+                    </span>
+                </a>
 
-                    <!-- Words -->
-                    <div class="download-item download-card-blue">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-blue">
-                                <i class="fas fa-align-left text-white text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">Word Timestamps</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Individual word timing</p>
-                            <a id="download-words" class="brutal-btn-download bg-electric-blue text-white w-full">
-                                <i class="fas fa-download mr-2"></i>Download JSON
-                            </a>
-                        </div>
+                <!-- Download: SRT -->
+                <a class="tile tile-download download-item" id="download-srt" data-accent="mint" href="#">
+                    <div class="dl-file-type">
+                        <span class="dl-dot" style="background:#22c55e;"></span>
+                        <span class="dl-name">SRT Subtitles</span>
                     </div>
+                    <span class="dl-desc">Standard subtitle format</span>
+                    <span class="dl-action">
+                        <i class="fas fa-arrow-down" style="font-size:0.625rem;"></i> Download
+                    </span>
+                </a>
 
-                    <!-- SRT -->
-                    <div class="download-item download-card-lime">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-lime">
-                                <i class="fas fa-closed-captioning text-jet text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">SRT Subtitles</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Standard subtitle format</p>
-                            <a id="download-srt" class="brutal-btn-download bg-electric-lime text-jet w-full">
-                                <i class="fas fa-download mr-2"></i>Download SRT
-                            </a>
-                        </div>
+                <!-- Download: VTT -->
+                <a class="tile tile-download download-item" id="download-vtt" data-accent="lavender" href="#">
+                    <div class="dl-file-type">
+                        <span class="dl-dot" style="background:#8b5cf6;"></span>
+                        <span class="dl-name">VTT Subtitles</span>
                     </div>
+                    <span class="dl-desc">Web subtitle format</span>
+                    <span class="dl-action">
+                        <i class="fas fa-arrow-down" style="font-size:0.625rem;"></i> Download
+                    </span>
+                </a>
 
-                    <!-- VTT -->
-                    <div class="download-item download-card-purple">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-purple">
-                                <i class="fas fa-closed-captioning text-white text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">VTT Subtitles</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Web video subtitle format</p>
-                            <a id="download-vtt" class="brutal-btn-download bg-electric-purple text-white w-full">
-                                <i class="fas fa-download mr-2"></i>Download VTT
-                            </a>
-                        </div>
+                <!-- Job Info -->
+                <div class="tile tile-job-info">
+                    <div class="job-label">Job ID</div>
+                    <div class="job-value" id="job-id"></div>
+                    <div style="margin-top:12px;">
+                        <div class="job-label">Status</div>
+                        <div class="job-value job-status-val" id="job-status">Completed</div>
                     </div>
                 </div>
-            </div>
 
-            <!-- New Upload Button -->
-            <div class="mt-10 text-center">
-                <button id="new-upload-btn" class="brutal-btn-primary bg-electric-purple py-4 px-10 inline-block">
-                    <i class="fas fa-plus mr-3 text-xl"></i>
-                    <span class="text-lg">CREATE ANOTHER CLIP</span>
+                <!-- New Clip button tile -->
+                <button class="tile tile-new-clip tile-action-btn" id="new-upload-btn">
+                    <div class="action-title">New Clip</div>
+                    <div class="action-sub">Start over</div>
                 </button>
+
             </div>
         </div>
 
-        <!-- Error Section -->
-        <div id="error-section" class="hidden brutal-card bg-white border-4 border-jet shadow-brutal-coral p-6 sm:p-8">
-            <div class="text-center">
-                <div class="mb-6 inline-block">
-                    <div class="bg-coral border-4 border-jet p-5 inline-block shadow-brutal-sm transform rotate-3">
-                        <i class="fas fa-exclamation-triangle text-white text-4xl"></i>
-                    </div>
+        <!-- ============================================
+             ERROR STATE
+             ============================================ -->
+        <div id="error-section" class="hidden">
+            <div class="tile error-tile">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation"></i>
                 </div>
-                <h3 class="text-2xl sm:text-3xl font-black text-jet uppercase mb-2">Oops! Something Broke</h3>
-                <p id="error-message" class="text-jet font-bold mb-6 bg-red-50 border-3 border-jet p-4 inline-block"></p>
-                <div>
-                    <button id="retry-btn" class="brutal-btn-primary bg-coral py-3 px-8 inline-block">
-                        <i class="fas fa-redo mr-2"></i>
-                        <span>TRY AGAIN</span>
-                    </button>
-                </div>
+                <div class="error-title">Something went wrong</div>
+                <p class="error-msg" id="error-message"></p>
+                <button class="btn-primary" id="retry-btn">Try Again</button>
             </div>
         </div>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-jet border-t-4 border-jet mt-16">
-        <!-- Footer Marquee -->
-        <div class="marquee-strip bg-electric-yellow border-b-4 border-jet overflow-hidden py-1">
-            <div class="marquee-content animate-marquee whitespace-nowrap">
-                <span class="inline-block mx-8 text-jet font-black text-xs tracking-widest uppercase">
-                    CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM
-                </span>
-            </div>
-        </div>
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div class="text-center">
-                <div class="flex items-center justify-center mb-6">
-                    <div class="bg-electric-yellow border-4 border-cream-100 px-5 py-2 transform -rotate-2">
-                        <h3 class="text-2xl font-black text-jet uppercase">
-                            <i class="fas fa-seedling mr-2"></i>ClipFarm
-                        </h3>
-                    </div>
-                </div>
-                <p class="text-cream-100 font-bold text-lg mb-6">Turn long videos into scroll-stopping shorts with captions</p>
+    <!-- Tile tilt effect on hover (cursor proximity) -->
+    <script>
+    (function() {
+        const tiles = document.querySelectorAll('.tile');
+        tiles.forEach(tile => {
+            tile.addEventListener('mousemove', e => {
+                const r = tile.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - 0.5;
+                const y = (e.clientY - r.top) / r.height - 0.5;
+                tile.style.transform = 'perspective(600px) rotateY(' + (x * 3) + 'deg) rotateX(' + (-y * 3) + 'deg) translateY(-2px)';
+            });
+            tile.addEventListener('mouseleave', () => {
+                tile.style.transform = '';
+            });
+        });
+    })();
+    </script>
 
-                <!-- Tech Stickers -->
-                <div class="flex flex-wrap items-center justify-center gap-3 mb-8">
-                    <div class="footer-sticker bg-electric-purple transform -rotate-2">
-                        <i class="fas fa-brain mr-1"></i> Whisper
-                    </div>
-                    <div class="footer-sticker bg-electric-blue transform rotate-1">
-                        <i class="fas fa-robot mr-1"></i> GPT
-                    </div>
-                    <div class="footer-sticker bg-coral transform -rotate-1">
-                        <i class="fas fa-film mr-1"></i> FFmpeg
-                    </div>
-                    <div class="footer-sticker bg-electric-lime text-jet transform rotate-2">
-                        <i class="fas fa-code mr-1"></i> FastAPI
-                    </div>
-                    <div class="footer-sticker bg-electric-yellow text-jet transform -rotate-3">
-                        <i class="fas fa-server mr-1"></i> Node.js
-                    </div>
-                </div>
+    <!-- Override file-info show/hide to swap decorative placeholder -->
+    <script>
+    (function() {
+        var fileInfo = document.getElementById('file-info');
+        var decoPlaceholder = document.getElementById('deco-placeholder');
+        if (!fileInfo || !decoPlaceholder) return;
 
-                <div class="border-t-3 border-cream-200 border-opacity-20 pt-6">
-                    <p class="text-cream-200 font-bold text-sm opacity-60">&copy; 2024 ClipFarm. All rights reserved.</p>
-                </div>
-            </div>
-        </div>
-    </footer>
+        function sync() {
+            var isHidden = fileInfo.classList.contains('hidden');
+            fileInfo.style.display = isHidden ? 'none' : '';
+            decoPlaceholder.style.display = isHidden ? '' : 'none';
+        }
+        sync(); // initial state
+
+        var obs = new MutationObserver(sync);
+        obs.observe(fileInfo, { attributes: true, attributeFilter: ['class'] });
+    })();
+    </script>
 
     <script src="/js/app.js"></script>
 </body>
