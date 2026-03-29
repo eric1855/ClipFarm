@@ -3,393 +3,646 @@
 @tailwind utilities;
 
 /* ============================================
-   CLIPFARM — NEO BOLD / NEOBRUTALIST THEME
+   CLIPFARM — TERMINAL HACKER THEME
    ============================================ */
+
+/* --- Google Font Import --- */
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap');
 
 /* --- Base Styles --- */
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #0f0f0f;
-}
-
-/* Noise/grain texture overlay */
-.noise-bg {
-  background-color: #fffbeb;
-  background-image:
-    repeating-radial-gradient(circle at 17% 32%, rgba(0,0,0,0.02) 0px, transparent 1px),
-    repeating-radial-gradient(circle at 83% 67%, rgba(0,0,0,0.02) 0px, transparent 1px),
-    repeating-radial-gradient(circle at 50% 50%, rgba(0,0,0,0.01) 0px, transparent 2px);
-  background-size: 3px 3px, 4px 4px, 5px 5px;
-}
-
-/* --- Marquee Animation --- */
-
-.marquee-strip {
+  font-family: 'Fira Code', 'JetBrains Mono', Consolas, Monaco, 'Courier New', monospace;
+  background-color: #0a0a0a;
+  color: #00ff41;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
   position: relative;
 }
 
-.marquee-content {
-  display: inline-block;
-  animation: marquee 20s linear infinite;
+/* --- CRT Scanline Overlay --- */
+
+.crt-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.03) 2px,
+    rgba(0, 255, 65, 0.03) 4px
+  );
 }
 
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+/* --- CRT Vignette --- */
+
+.crt-vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
 }
 
-/* --- Brutal Card Base --- */
+/* --- Matrix Rain Background --- */
 
-.brutal-card {
+.matrix-rain {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  opacity: 0.06;
+}
+
+.matrix-column {
+  position: absolute;
+  top: -100%;
+  font-family: 'Fira Code', monospace;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #00ff41;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  white-space: nowrap;
+  animation: matrixFall linear infinite;
+}
+
+.matrix-col-1 { left: 5%;  animation-duration: 15s; animation-delay: 0s; }
+.matrix-col-1::before { content: '01001101 01100001 01110100 01110010 01101001 01111000 00100000 01010010 01100001 01101001 01101110'; }
+
+.matrix-col-2 { left: 15%; animation-duration: 20s; animation-delay: -3s; }
+.matrix-col-2::before { content: 'WHISPER FFT DECODE SEGMENT SPLICE RENDER EXPORT TRANSCRIBE PROCESS ANALYZE CLIP FARM'; }
+
+.matrix-col-3 { left: 30%; animation-duration: 18s; animation-delay: -7s; }
+.matrix-col-3::before { content: '#!/usr/bin/env python3 import whisper model.transcribe(audio) segments = result["segments"]'; }
+
+.matrix-col-4 { left: 45%; animation-duration: 22s; animation-delay: -2s; }
+.matrix-col-4::before { content: '0xDEADBEEF 0xCAFEBABE 0xFF00FF41 0x0A0A0A0A 0xC0FFEE42 0xBAADF00D 0xFEEDFACE'; }
+
+.matrix-col-5 { left: 60%; animation-duration: 16s; animation-delay: -5s; }
+.matrix-col-5::before { content: 'ffmpeg -i input.mp4 -ss 00:01:30 -to 00:01:45 -c copy output.mp4 -y -loglevel quiet'; }
+
+.matrix-col-6 { left: 72%; animation-duration: 19s; animation-delay: -8s; }
+.matrix-col-6::before { content: '>>> processing audio... >>> extracting features... >>> running inference... >>> complete'; }
+
+.matrix-col-7 { left: 85%; animation-duration: 17s; animation-delay: -1s; }
+.matrix-col-7::before { content: 'TCP SYN ACK FIN RST PSH URG ESTABLISHED LISTEN CLOSE_WAIT TIME_WAIT CLOSED'; }
+
+.matrix-col-8 { left: 93%; animation-duration: 21s; animation-delay: -6s; }
+.matrix-col-8::before { content: 'SELECT * FROM clips WHERE score > 0.8 ORDER BY timestamp ASC LIMIT 10; -- ClipFarm DB'; }
+
+@keyframes matrixFall {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(calc(100vh + 100%)); }
+}
+
+/* --- Terminal Window --- */
+
+.terminal-window {
   position: relative;
+  z-index: 10;
+  max-width: 900px;
+  margin: 20px auto;
+  border: 1px solid #00ff41;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow:
+    0 0 15px rgba(0, 255, 65, 0.1),
+    0 0 30px rgba(0, 255, 65, 0.05),
+    inset 0 0 15px rgba(0, 255, 65, 0.02);
 }
 
-/* --- Upload Area --- */
+/* --- Terminal Title Bar --- */
 
-.upload-area {
-  @apply border-4 border-dashed border-jet p-10 sm:p-14 text-center transition-all duration-200;
-  background-color: #fff;
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(250, 204, 21, 0.08) 10px,
-      rgba(250, 204, 21, 0.08) 20px
-    );
+.terminal-titlebar {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: #111111;
+  border-bottom: 1px solid #0a3d0a;
+  gap: 12px;
 }
 
-.upload-area:hover {
-  @apply border-jet bg-cream-100;
-  box-shadow: -8px -8px 0px #0f0f0f;
-  transform: translate(4px, 4px);
-}
-
-.upload-area.dragover {
-  @apply border-jet bg-electric-yellow bg-opacity-20;
-  box-shadow: 12px 12px 0px #0f0f0f;
-  transform: scale(1.02);
-}
-
-/* --- File Type Badges (Sticker Style) --- */
-
-.file-badge {
-  @apply px-3 py-1 text-xs font-black uppercase border-3 border-jet;
+.titlebar-dot {
   display: inline-block;
-  box-shadow: 2px 2px 0px #0f0f0f;
-  transform: rotate(var(--badge-rotate, 0deg));
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
 }
 
-.file-badge:nth-child(1) { --badge-rotate: -2deg; }
-.file-badge:nth-child(2) { --badge-rotate: 1deg; }
-.file-badge:nth-child(3) { --badge-rotate: -1deg; }
-.file-badge:nth-child(4) { --badge-rotate: 2deg; }
-.file-badge:nth-child(5) { --badge-rotate: -1.5deg; }
-.file-badge:nth-child(6) { --badge-rotate: 1.5deg; }
+/* --- Terminal Content --- */
 
-/* --- Buttons --- */
-
-.brutal-btn-primary {
-  @apply font-black text-jet uppercase border-4 border-jet cursor-pointer;
-  background-color: #facc15;
-  box-shadow: 6px 6px 0px #0f0f0f;
-  transition: all 0.15s ease;
-  letter-spacing: 0.05em;
+.terminal-content {
+  padding: 24px;
+  background-color: #0a0a0a;
+  min-height: calc(100vh - 120px);
 }
 
-.brutal-btn-primary:hover:not(:disabled) {
-  box-shadow: 3px 3px 0px #0f0f0f;
-  transform: translate(3px, 3px) rotate(-1deg);
+/* --- ASCII Logo --- */
+
+.ascii-logo {
+  color: #00ff41;
+  font-size: 0.5rem;
+  line-height: 1.1;
+  text-align: center;
+  margin-bottom: 16px;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+  overflow-x: auto;
 }
 
-.brutal-btn-primary:active:not(:disabled) {
-  box-shadow: 0px 0px 0px #0f0f0f;
-  transform: translate(6px, 6px);
+@media (min-width: 640px) {
+  .ascii-logo {
+    font-size: 0.7rem;
+  }
 }
 
-.brutal-btn-primary:disabled {
-  @apply opacity-40 cursor-not-allowed;
-  box-shadow: 6px 6px 0px #0f0f0f;
+@media (min-width: 768px) {
+  .ascii-logo {
+    font-size: 0.85rem;
+  }
 }
 
-/* Purple variant */
-.brutal-btn-primary.bg-electric-purple {
-  background-color: #a855f7;
-  color: white;
+/* --- Boot Sequence --- */
+
+.boot-sequence {
+  margin-bottom: 16px;
 }
 
-/* Coral variant */
-.brutal-btn-primary.bg-coral {
-  background-color: #ff6b6b;
-  color: white;
+.boot-line {
+  font-size: 0.8rem;
+  line-height: 1.8;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
 }
 
-.brutal-btn-small {
-  @apply font-black uppercase border-3 border-jet px-4 py-2 cursor-pointer;
-  box-shadow: 4px 4px 0px #0f0f0f;
-  transition: all 0.15s ease;
+/* --- Blinking Cursor --- */
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+  font-weight: bold;
 }
 
-.brutal-btn-small:hover {
-  box-shadow: 2px 2px 0px #0f0f0f;
-  transform: translate(2px, 2px);
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
-/* Download buttons */
-.brutal-btn-download {
-  @apply font-black uppercase border-3 border-jet px-4 py-3 cursor-pointer block text-center text-sm;
-  box-shadow: 4px 4px 0px #0f0f0f;
-  transition: all 0.15s ease;
-  text-decoration: none;
+/* --- Terminal Divider --- */
+
+.terminal-divider {
+  border: none;
+  border-top: 1px solid #0a3d0a;
+  margin: 20px 0;
 }
 
-.brutal-btn-download:hover {
-  box-shadow: 2px 2px 0px #0f0f0f;
-  transform: translate(2px, 2px);
+/* --- Prompt Line --- */
+
+.prompt-line {
+  font-size: 0.85rem;
+  margin-bottom: 12px;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
 }
 
-.brutal-btn-download:active {
-  box-shadow: 0px 0px 0px #0f0f0f;
-  transform: translate(4px, 4px);
+/* --- Typewriter Text --- */
+
+.typewriter-text {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid #00ff41;
+  animation:
+    typewriter 1.5s steps(14) 2s forwards,
+    cursorBlink 0.8s step-end infinite;
+  width: 0;
 }
 
-/* --- Form Elements --- */
+@keyframes typewriter {
+  0% { width: 0; }
+  100% { width: 14ch; }
+}
 
-.brutal-select {
-  @apply border-3 border-jet px-4 py-3 font-bold text-jet bg-white cursor-pointer;
-  box-shadow: 4px 4px 0px #0f0f0f;
+@keyframes cursorBlink {
+  0%, 100% { border-color: #00ff41; }
+  50% { border-color: transparent; }
+}
+
+/* --- Terminal Section --- */
+
+.terminal-section {
+  margin-bottom: 16px;
+}
+
+/* --- Upload Zone --- */
+
+.upload-zone {
+  border: 1px dashed #00ff41;
+  padding: 32px 20px;
+  text-align: center;
+  transition: all 0.2s ease;
+  background-color: rgba(0, 255, 65, 0.02);
+  margin-top: 8px;
+}
+
+.upload-zone:hover {
+  background-color: rgba(0, 255, 65, 0.06);
+  border-color: #00ff41;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+}
+
+.upload-zone.dragover {
+  background-color: rgba(0, 255, 65, 0.1);
+  border-color: #00ff41;
+  box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+}
+
+/* --- File Tags --- */
+
+.file-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  color: #00ff41;
+  border: 1px solid #0a3d0a;
+  background-color: rgba(0, 255, 65, 0.05);
+}
+
+/* --- File Info Block --- */
+
+.file-info-block {
+  padding: 12px 16px;
+  border-left: 2px solid #00ff41;
+  margin-top: 8px;
+  background-color: rgba(0, 255, 65, 0.03);
+  font-size: 0.85rem;
+  line-height: 1.8;
+}
+
+/* --- Remove File Button --- */
+
+.remove-file-btn {
+  background: none;
+  border: 1px solid #ff0040;
+  color: #ff0040;
+  padding: 4px 12px;
+  font-family: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-file-btn:hover {
+  background-color: rgba(255, 0, 64, 0.15);
+  box-shadow: 0 0 10px rgba(255, 0, 64, 0.3);
+}
+
+/* --- Config Block --- */
+
+.config-block {
+  padding: 12px 16px;
+  border-left: 2px solid #0a3d0a;
+  margin-top: 8px;
+  background-color: rgba(0, 255, 65, 0.02);
+}
+
+.config-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 0.85rem;
+}
+
+.config-label {
+  color: #ffb000;
+  min-width: 110px;
+  font-size: 0.85rem;
+}
+
+/* --- Terminal Select --- */
+
+.terminal-select {
+  background-color: #0a0a0a;
+  color: #00ff41;
+  border: 1px solid #0a3d0a;
+  padding: 4px 28px 4px 8px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%230f0f0f' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2300ff41' viewBox='0 0 16 16'%3E%3Cpath d='M8 12L3 7h10z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 40px;
-  transition: all 0.15s ease;
+  background-position: right 6px center;
+  transition: all 0.2s ease;
 }
 
-.brutal-select:focus {
+.terminal-select:hover {
+  border-color: #00ff41;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.2);
+}
+
+.terminal-select:focus {
   outline: none;
-  box-shadow: 6px 6px 0px #0f0f0f;
-  transform: translate(-2px, -2px);
+  border-color: #00ff41;
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.3);
 }
 
-.brutal-input {
-  @apply border-3 border-jet px-4 py-3 font-bold text-jet bg-white;
-  box-shadow: 4px 4px 0px #0f0f0f;
-  transition: all 0.15s ease;
+.terminal-select option {
+  background-color: #0a0a0a;
+  color: #00ff41;
 }
 
-.brutal-input:focus {
-  outline: none;
-  box-shadow: 6px 6px 0px #0f0f0f;
-  transform: translate(-2px, -2px);
+/* --- VAD Toggle --- */
+
+.vad-toggle {
+  cursor: pointer;
+  user-select: none;
 }
 
-.brutal-input::placeholder {
-  @apply text-gray-400 font-bold;
+.vad-toggle .vad-status {
+  transition: all 0.2s ease;
 }
 
-textarea.brutal-input {
+.vad-toggle input:checked + .vad-status {
+  color: #00ff41 !important;
+}
+
+.vad-toggle input:checked + .vad-status::after {
+  content: '';
+}
+
+/* JS-free toggle text swap via CSS - the JS in app.js uses the checkbox value directly */
+.vad-toggle input:not(:checked) + .vad-status::before {
+  content: '[off]';
+}
+.vad-toggle input:not(:checked) + .vad-status {
+  font-size: 0;
+}
+.vad-toggle input:not(:checked) + .vad-status::before {
+  font-size: 0.85rem;
+}
+.vad-toggle input:checked + .vad-status {
+  font-size: 0;
+}
+.vad-toggle input:checked + .vad-status::before {
+  content: '[ on]';
+  font-size: 0.85rem;
+  color: #00ff41;
+}
+
+/* --- Terminal Textarea --- */
+
+.terminal-textarea {
+  width: 100%;
+  background-color: #0a0a0a;
+  color: #00ff41;
+  border: 1px solid #0a3d0a;
+  padding: 10px 12px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.8rem;
   resize: vertical;
-  min-height: 80px;
+  min-height: 60px;
+  margin-top: 8px;
+  transition: all 0.2s ease;
 }
 
-.brutal-checkbox {
-  @apply border-3 border-jet cursor-pointer;
-  accent-color: #facc15;
+.terminal-textarea::placeholder {
+  color: #0a3d0a;
 }
 
-/* --- Step Numbers --- */
-
-.step-number {
-  flex-shrink: 0;
+.terminal-textarea:focus {
+  outline: none;
+  border-color: #00ff41;
+  box-shadow: 0 0 12px rgba(0, 255, 65, 0.15);
 }
 
-/* --- Progress Bar --- */
+/* --- Execute Button --- */
 
-.progress-brutal {
+.execute-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #00ff41;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 8px;
+  transition: all 0.2s ease;
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.4);
+  line-height: 1.4;
+}
+
+.execute-btn:hover:not(:disabled) {
+  color: #00ff41;
+  text-shadow: 0 0 20px rgba(0, 255, 65, 0.6), 0 0 40px rgba(0, 255, 65, 0.3);
+  transform: scale(1.02);
+}
+
+.execute-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.execute-btn:disabled {
+  color: #0a3d0a;
+  cursor: not-allowed;
+  text-shadow: none;
+}
+
+.execute-btn.retry {
+  color: #ff0040;
+  text-shadow: 0 0 5px rgba(255, 0, 64, 0.4);
+}
+
+.execute-btn.retry:hover {
+  text-shadow: 0 0 20px rgba(255, 0, 64, 0.6), 0 0 40px rgba(255, 0, 64, 0.3);
+}
+
+.execute-btn.new-upload {
+  color: #00d4ff;
+  text-shadow: 0 0 5px rgba(0, 212, 255, 0.4);
+}
+
+.execute-btn.new-upload:hover {
+  text-shadow: 0 0 20px rgba(0, 212, 255, 0.6), 0 0 40px rgba(0, 212, 255, 0.3);
+}
+
+/* --- Progress Section --- */
+
+.progress-log {
+  padding: 16px;
+  border-left: 2px solid #ffb000;
+  background-color: rgba(255, 176, 0, 0.03);
+  font-size: 0.85rem;
+}
+
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+}
+
+.progress-bar-track {
+  flex: 1;
+  height: 16px;
+  background-color: #111111;
+  border: 1px solid #0a3d0a;
+  overflow: hidden;
   position: relative;
 }
 
-.progress-stripes {
+.progress-bar-fill {
+  height: 100%;
   background: repeating-linear-gradient(
-    -45deg,
-    transparent,
-    transparent 8px,
-    rgba(0, 0, 0, 0.1) 8px,
-    rgba(0, 0, 0, 0.1) 16px
+    90deg,
+    #00ff41 0px,
+    #00ff41 8px,
+    #00b330 8px,
+    #00b330 10px
   );
-  animation: stripeMove 1s linear infinite;
+  transition: width 0.5s ease-out;
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
 }
 
-@keyframes stripeMove {
-  0% { background-position: 0 0; }
-  100% { background-position: 32px 0; }
+/* --- Video Frame --- */
+
+.video-frame {
+  border: 1px solid #00ff41;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.15);
+  overflow: hidden;
 }
 
-/* --- Loading Spinner --- */
-
-.loading-spinner {
-  @apply animate-spin rounded-full h-10 w-10 border-4;
-  border-color: #0f0f0f;
-  border-top-color: #facc15;
+.video-frame video {
+  display: block;
 }
 
-/* --- Download Cards --- */
+/* --- Job Info Block --- */
 
-.download-card-yellow {
-  @apply bg-yellow-50 border-4 border-jet p-5;
-  box-shadow: 6px 6px 0px #facc15;
+.job-info-block {
+  padding: 12px 16px;
+  border-left: 2px solid #00d4ff;
+  background-color: rgba(0, 212, 255, 0.03);
+  font-size: 0.85rem;
+  line-height: 2;
+}
+
+/* --- Download List --- */
+
+.download-list {
+  border-left: 2px solid #00ff41;
+  padding-left: 16px;
+}
+
+.download-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  font-size: 0.8rem;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.05);
+}
+
+.download-row:last-child {
+  border-bottom: none;
+}
+
+.download-link {
+  color: #00ff41;
+  text-decoration: none;
+  border: 1px solid #0a3d0a;
+  padding: 2px 10px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
   transition: all 0.2s ease;
-}
-.download-card-yellow:hover {
-  box-shadow: 3px 3px 0px #facc15;
-  transform: translate(3px, 3px) rotate(-1deg);
-}
-
-.download-card-coral {
-  @apply bg-red-50 border-4 border-jet p-5;
-  box-shadow: 6px 6px 0px #ff6b6b;
-  transition: all 0.2s ease;
-}
-.download-card-coral:hover {
-  box-shadow: 3px 3px 0px #ff6b6b;
-  transform: translate(3px, 3px) rotate(1deg);
+  cursor: pointer;
+  background: none;
+  margin-left: auto;
 }
 
-.download-card-blue {
-  @apply bg-blue-50 border-4 border-jet p-5;
-  box-shadow: 6px 6px 0px #3b82f6;
-  transition: all 0.2s ease;
-}
-.download-card-blue:hover {
-  box-shadow: 3px 3px 0px #3b82f6;
-  transform: translate(3px, 3px) rotate(-1.5deg);
+.download-link:hover {
+  border-color: #00ff41;
+  background-color: rgba(0, 255, 65, 0.1);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
 }
 
-.download-card-lime {
-  @apply bg-green-50 border-4 border-jet p-5;
-  box-shadow: 6px 6px 0px #84cc16;
-  transition: all 0.2s ease;
-}
-.download-card-lime:hover {
-  box-shadow: 3px 3px 0px #84cc16;
-  transform: translate(3px, 3px) rotate(1deg);
+/* --- Error Block --- */
+
+.error-block {
+  border-left: 2px solid #ff0040;
+  padding-left: 16px;
 }
 
-.download-card-purple {
-  @apply bg-purple-50 border-4 border-jet p-5;
-  box-shadow: 6px 6px 0px #a855f7;
-  transition: all 0.2s ease;
-}
-.download-card-purple:hover {
-  box-shadow: 3px 3px 0px #a855f7;
-  transform: translate(3px, 3px) rotate(-1deg);
+.error-msg {
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 0, 64, 0.3);
+  background-color: rgba(255, 0, 64, 0.05);
+  font-size: 0.8rem;
+  color: #ff0040;
 }
 
-/* Download icon circle */
-.download-icon {
-  @apply border-4 border-jet w-16 h-16 flex items-center justify-center mx-auto mb-4;
-  box-shadow: 3px 3px 0px #0f0f0f;
+/* --- Terminal Footer --- */
+
+.terminal-footer {
+  padding: 16px 0 24px;
+  text-align: center;
 }
 
-/* --- Wavy Underline --- */
+/* --- Screen Flicker Animation --- */
 
-.wavy-underline {
-  text-decoration: underline;
-  text-decoration-style: wavy;
-  text-decoration-color: #facc15;
-  text-underline-offset: 8px;
-  text-decoration-thickness: 4px;
+.animate-flicker {
+  animation: flicker 4s infinite;
 }
 
-/* --- Footer Stickers --- */
-
-.footer-sticker {
-  @apply text-white font-black text-xs uppercase px-3 py-1 border-3 border-white border-opacity-50;
-  box-shadow: 3px 3px 0px rgba(255, 255, 255, 0.2);
-  transition: all 0.2s ease;
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.85; }
+  94% { opacity: 1; }
+  96% { opacity: 0.92; }
+  97% { opacity: 1; }
 }
 
-.footer-sticker:hover {
-  transform: scale(1.1) rotate(0deg) !important;
-  box-shadow: 4px 4px 0px rgba(255, 255, 255, 0.3);
+/* --- Text Glow --- */
+
+.text-glow {
+  text-shadow: 0 0 10px currentColor;
 }
 
-/* --- Shadow Variants --- */
+/* --- Animations required by app.js --- */
 
-.shadow-brutal-coral {
-  box-shadow: 8px 8px 0px #ff6b6b;
-}
-
-/* --- Scrollbar --- */
-
-::-webkit-scrollbar {
-  width: 12px;
-}
-
-::-webkit-scrollbar-track {
-  background: #fef3c7;
-  border-left: 3px solid #0f0f0f;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #0f0f0f;
-  border: 2px solid #fef3c7;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #facc15;
-}
-
-/* --- Animations --- */
-
-@keyframes wobble {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-2deg); }
-  75% { transform: rotate(2deg); }
-}
-
-@keyframes bounceIn {
-  0% { transform: scale(0.3); opacity: 0; }
-  50% { transform: scale(1.05); }
-  70% { transform: scale(0.9); }
-  100% { transform: scale(1); opacity: 1; }
+.animate-slide-up {
+  animation: slideUp 0.4s ease-out both;
 }
 
 @keyframes slideUp {
-  0% { transform: translateY(30px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes wiggle {
-  0%, 100% { transform: rotate(-2deg); }
-  50% { transform: rotate(2deg); }
-}
-
-@keyframes pop {
-  0% { transform: scale(0.8); opacity: 0; }
-  80% { transform: scale(1.1); }
-  100% { transform: scale(1); opacity: 1; }
-}
-
-/* Animation utility classes */
-.animate-slide-up {
-  animation: slideUp 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
-}
-
-.animate-bounce-in {
-  animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
-}
-
-.animate-pop {
-  animation: pop 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) both;
-}
-
-.animate-wobble {
-  animation: wobble 0.5s ease-in-out;
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in {
@@ -397,55 +650,98 @@ textarea.brutal-input {
 }
 
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(10px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }
 
-/* Success bounce for download buttons */
 .animate-success-bounce {
-  animation: successBounce 0.6s ease;
+  animation: successFlash 0.4s ease;
 }
 
-@keyframes successBounce {
-  0%, 100% { transform: translate(0, 0); }
-  30% { transform: translate(2px, 2px) scale(0.95); }
-  60% { transform: translate(-1px, -1px) scale(1.02); }
+@keyframes successFlash {
+  0%, 100% { box-shadow: none; }
+  50% { box-shadow: 0 0 20px rgba(0, 255, 65, 0.5); }
 }
 
 /* --- Selection Color --- */
 
 ::selection {
-  background: #facc15;
-  color: #0f0f0f;
+  background: #00ff41;
+  color: #0a0a0a;
 }
 
 /* --- Focus Visible (Accessibility) --- */
 
 *:focus-visible {
-  outline: 3px solid #0f0f0f;
+  outline: 1px solid #00ff41;
   outline-offset: 2px;
 }
 
-/* --- Responsive Tweaks --- */
+/* --- Scrollbar --- */
 
-@media (max-width: 640px) {
-  .upload-area {
-    @apply p-6;
-  }
+::-webkit-scrollbar {
+  width: 8px;
+}
 
-  .wavy-underline {
-    text-underline-offset: 5px;
-    text-decoration-thickness: 3px;
-  }
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0a3d0a;
+  border: 1px solid #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff41;
 }
 
 /* --- Loading State --- */
 
 .loading {
-  @apply opacity-75 pointer-events-none;
+  opacity: 0.75;
+  pointer-events: none;
 }
 
 /* --- Compatibility: result-card alias used in original app.js --- */
 .result-card {
   /* Kept as no-op for any JS references */
+}
+
+/* --- Responsive Tweaks --- */
+
+@media (max-width: 640px) {
+  .terminal-content {
+    padding: 16px 12px;
+  }
+
+  .terminal-window {
+    margin: 8px;
+    border-radius: 4px;
+  }
+
+  .ascii-logo {
+    font-size: 0.38rem;
+  }
+
+  .download-row {
+    font-size: 0.7rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .download-link {
+    margin-left: 0;
+  }
+
+  .config-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .config-label {
+    min-width: unset;
+  }
 }
