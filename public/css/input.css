@@ -190,9 +190,9 @@ body {
 }
 
 .boot-line {
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   line-height: 1.8;
-  text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.35);
 }
 
 /* --- Blinking Cursor --- */
@@ -218,9 +218,10 @@ body {
 /* --- Prompt Line --- */
 
 .prompt-line {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   margin-bottom: 12px;
-  text-shadow: 0 0 5px rgba(0, 255, 65, 0.3);
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+  font-weight: 500;
 }
 
 /* --- Typewriter Text --- */

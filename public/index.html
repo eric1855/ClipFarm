@@ -35,13 +35,10 @@
                 <span class="titlebar-dot bg-yellow-400"></span>
                 <span class="titlebar-dot bg-green-500"></span>
             </div>
-            <div class="flex-1 text-center text-terminal-green-dim text-xs tracking-widest">
+            <div class="flex-1 text-center text-terminal-green text-sm tracking-wide font-semibold" style="text-shadow: 0 0 8px rgba(0,255,65,0.5);">
                 clipfarm@ai:~$
             </div>
-            <div id="connection-status" class="flex items-center text-xs">
-                <span class="inline-block w-2 h-2 rounded-full bg-terminal-green-dim mr-2 animate-blink"></span>
-                <span class="text-terminal-green-dim">CONNECTING...</span>
-            </div>
+            <div id="connection-status" class="hidden"></div>
         </header>
 
         <!-- Terminal Content -->
@@ -309,9 +306,6 @@
             <footer class="terminal-footer">
                 <p class="text-terminal-green-dim text-xs">
                     <span class="text-terminal-green-dim">[SYS]</span> ClipFarm v2.0 | Whisper + GPT-4o + FFmpeg | Node.js + FastAPI
-                </p>
-                <p class="text-terminal-green-dim text-xs mt-1 opacity-50">
-                    &copy; 2024 ClipFarm. All rights reserved.
                 </p>
             </footer>
 
