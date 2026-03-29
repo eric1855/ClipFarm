@@ -3,32 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Short‑Form Content Creator</title>
+    <title>ClipFarm</title>
     <link href="/css/output.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen font-inter">
+<body class="crystal-bg min-h-screen font-inter relative">
+
     <!-- Header -->
-    <header class="bg-white/80 backdrop-blur-md shadow-lg border-b border-white/20 sticky top-0 z-50">
+    <header class="crystal-header sticky top-0 z-50 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-6">
-                <div class="flex items-center">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl blur opacity-75"></div>
-                        <div class="relative bg-gradient-to-r from-blue-600 to-indigo-600 p-3 rounded-xl">
-                            <i class="fas fa-closed-captioning text-2xl text-white"></i>
+            <div class="flex justify-between items-center py-5">
+                <div class="flex items-center animate-enter">
+                    <div class="relative" style="perspective: 600px;">
+                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-xl blur-lg opacity-50 animate-pulse-prism"></div>
+                        <div class="relative prism-badge rounded-xl">
+                            <i class="fas fa-seedling text-2xl text-white"></i>
                         </div>
                     </div>
                     <div class="ml-4">
-                        <h1 class="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                            Short‑Form Content Creator
+                        <h1 class="text-2xl font-extrabold gradient-text text-shadow-depth">
+                            ClipFarm
                         </h1>
-                        <p class="text-sm text-gray-500 font-medium">AI‑powered clip discovery and captions</p>
+                        <p class="text-sm text-gray-500/80 font-medium tracking-wide">AI-powered clip discovery & captions</p>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <div id="connection-status" class="flex items-center px-4 py-2 bg-gray-100 rounded-full">
+                <div class="flex items-center space-x-4 animate-enter animate-enter-delay-1">
+                    <div id="connection-status" class="status-badge">
                         <div class="w-2 h-2 bg-gray-400 rounded-full mr-2 animate-pulse"></div>
                         <span class="text-sm text-gray-600 font-medium">Checking connection...</span>
                     </div>
@@ -38,300 +39,364 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Upload Section -->
-        <div class="result-card mb-8 transform hover:scale-[1.02] transition-all duration-300">
-            <div class="flex items-center mb-6">
-                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-2 rounded-lg mr-3">
-                    <i class="fas fa-upload text-white text-lg"></i>
-                </div>
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Upload Your Video</h2>
-                    <p class="text-gray-600">Automatically find short‑form moments and generate captions</p>
-                </div>
-            </div>
-            
-            <!-- File Upload Area -->
-            <div id="upload-area" class="upload-area mb-6 group">
-                <div class="upload-content">
-                    <div class="relative mb-6">
-                        <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full blur-lg opacity-30 group-hover:opacity-50 transition-opacity"></div>
-                        <div class="relative bg-gradient-to-r from-blue-500 to-indigo-600 p-6 rounded-full inline-block">
-                            <i class="fas fa-cloud-upload-alt text-4xl text-white"></i>
-                        </div>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Drop your file here</h3>
-                    <p class="text-gray-600 mb-4">or click to browse your computer</p>
-                    <div class="flex flex-wrap justify-center gap-2 mb-4">
-                        <span class="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">MP4</span>
-                        <span class="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">AVI</span>
-                        <span class="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-medium rounded-full">MOV</span>
-                        <span class="px-3 py-1 bg-orange-100 text-orange-800 text-xs font-medium rounded-full">WAV</span>
-                        <span class="px-3 py-1 bg-pink-100 text-pink-800 text-xs font-medium rounded-full">MP3</span>
-                        <span class="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-medium rounded-full">M4A</span>
-                    </div>
-                    <p class="text-sm text-gray-500 bg-gray-50 px-4 py-2 rounded-lg inline-block">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        Maximum file size: 100MB
-                    </p>
-                    <input type="file" id="file-input" class="hidden" accept=".mp4,.avi,.mov,.mkv,.wav,.mp3,.m4a,.flac,.ogg">
-                </div>
-            </div>
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
 
-            <!-- Selected File Info -->
-            <div id="file-info" class="hidden mb-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-200 shadow-sm">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 p-3 rounded-lg mr-4">
-                            <i class="fas fa-file-video text-white text-xl"></i>
+        <!-- Decorative 3D wireframe cubes floating in hero area -->
+        <div class="absolute top-12 right-8 pointer-events-none opacity-60 hidden lg:block" style="perspective: 800px;">
+            <div class="wireframe-cube">
+                <div class="face"></div>
+                <div class="face"></div>
+                <div class="face"></div>
+                <div class="face"></div>
+                <div class="face"></div>
+                <div class="face"></div>
+            </div>
+        </div>
+        <div class="absolute top-32 left-4 pointer-events-none opacity-40 hidden lg:block" style="perspective: 1000px;">
+            <div class="wireframe-outer">
+                <div class="face"></div>
+                <div class="face"></div>
+                <div class="face"></div>
+                <div class="face"></div>
+                <div class="face"></div>
+                <div class="face"></div>
+            </div>
+        </div>
+
+        <!-- Floating particles -->
+        <div class="particle hidden lg:block" style="top: 15%; left: 10%; animation-delay: 0s;"></div>
+        <div class="particle hidden lg:block" style="top: 25%; right: 15%; animation-delay: 2s; width: 6px; height: 6px; background: rgba(236, 72, 153, 0.25);"></div>
+        <div class="particle hidden lg:block" style="top: 60%; left: 5%; animation-delay: 4s; width: 5px; height: 5px; background: rgba(14, 184, 166, 0.25);"></div>
+        <div class="particle hidden lg:block" style="top: 45%; right: 8%; animation-delay: 6s;"></div>
+
+        <!-- Upload Section -->
+        <div class="perspective-container animate-enter animate-enter-delay-1">
+            <div class="crystal-card mb-10 parallax-card">
+                <div class="flex items-center mb-8">
+                    <div class="prism-badge mr-4">
+                        <i class="fas fa-upload text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 text-shadow-depth">Upload Your Video</h2>
+                        <p class="text-gray-500 text-sm mt-0.5">Automatically find short-form moments and generate captions</p>
+                    </div>
+                </div>
+
+                <!-- File Upload Area (3D floating platform) -->
+                <div style="perspective: 800px;" class="mb-8">
+                    <div id="upload-area" class="upload-area group">
+                        <div class="upload-content relative z-10">
+                            <div class="relative mb-6 inline-block">
+                                <div class="absolute inset-0 bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-400 rounded-full blur-xl opacity-30 group-hover:opacity-60 transition-opacity duration-500"></div>
+                                <div class="relative prism-badge p-6 rounded-full">
+                                    <i class="fas fa-cloud-upload-alt text-4xl text-white"></i>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Drop your file here</h3>
+                            <p class="text-gray-500 mb-5">or click to browse your computer</p>
+                            <div class="flex flex-wrap justify-center gap-2 mb-5">
+                                <span class="format-tag">MP4</span>
+                                <span class="format-tag">AVI</span>
+                                <span class="format-tag">MOV</span>
+                                <span class="format-tag">WAV</span>
+                                <span class="format-tag">MP3</span>
+                                <span class="format-tag">M4A</span>
+                            </div>
+                            <p class="text-sm text-gray-400 glass-tooltip inline-block">
+                                <i class="fas fa-info-circle mr-2 text-indigo-400"></i>
+                                Maximum file size: 100MB
+                            </p>
+                            <input type="file" id="file-input" class="hidden" accept=".mp4,.avi,.mov,.mkv,.wav,.mp3,.m4a,.flac,.ogg">
                         </div>
+                    </div>
+                </div>
+
+                <!-- Selected File Info -->
+                <div id="file-info" class="hidden mb-8 file-info-card">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="prism-badge p-3 rounded-lg mr-4">
+                                <i class="fas fa-file-video text-white text-xl"></i>
+                            </div>
+                            <div>
+                                <p id="file-name" class="font-bold text-gray-900 text-lg"></p>
+                                <p id="file-size" class="text-sm text-gray-500"></p>
+                                <div class="flex items-center mt-1.5">
+                                    <div class="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></div>
+                                    <span class="text-xs text-emerald-600 font-semibold tracking-wide">Ready to process</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="remove-file" class="bg-red-50 hover:bg-red-100 text-red-500 p-2.5 rounded-xl transition-all duration-200 hover:scale-110">
+                            <i class="fas fa-times text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Processing Options -->
+                <div class="options-panel mb-8">
+                    <h3 class="text-lg font-bold text-gray-800 mb-5 flex items-center">
+                        <i class="fas fa-cogs text-indigo-500 mr-2"></i>
+                        Processing Options
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <p id="file-name" class="font-semibold text-gray-900 text-lg"></p>
-                            <p id="file-size" class="text-sm text-gray-600"></p>
-                            <div class="flex items-center mt-1">
-                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                                <span class="text-xs text-green-600 font-medium">Ready to process</span>
+                            <label for="model-select" class="block text-sm font-semibold text-gray-600 mb-2">
+                                <i class="fas fa-brain text-purple-500 mr-2"></i>
+                                Whisper Model
+                            </label>
+                            <select id="model-select" class="crystal-input">
+                                <option value="tiny">Tiny (Fastest)</option>
+                                <option value="base">Base</option>
+                                <option value="small" selected>Small (Recommended)</option>
+                                <option value="medium">Medium</option>
+                                <option value="large">Large (Most Accurate)</option>
+                                <option value="large-v2">Large v2</option>
+                                <option value="large-v3">Large v3</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="language-select" class="block text-sm font-semibold text-gray-600 mb-2">
+                                <i class="fas fa-globe text-teal-500 mr-2"></i>
+                                Language (Optional)
+                            </label>
+                            <select id="language-select" class="crystal-input">
+                                <option value="">Auto-detect</option>
+                                <option value="en">English</option>
+                                <option value="es">Spanish</option>
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                                <option value="it">Italian</option>
+                                <option value="pt">Portuguese</option>
+                                <option value="ru">Russian</option>
+                                <option value="ja">Japanese</option>
+                                <option value="ko">Korean</option>
+                                <option value="zh">Chinese</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="compute-type" class="block text-sm font-semibold text-gray-600 mb-2">
+                                <i class="fas fa-microchip text-orange-500 mr-2"></i>
+                                Compute Type
+                            </label>
+                            <select id="compute-type" class="crystal-input">
+                                <option value="int8_float16">GPU Optimized</option>
+                                <option value="int8">CPU Only</option>
+                                <option value="float16">GPU High Precision</option>
+                            </select>
+                        </div>
+
+                        <div class="flex items-center justify-center">
+                            <div class="crystal-checkbox-wrap">
+                                <label for="vad-filter" class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="vad-filter" class="mr-3 w-5 h-5 text-indigo-600 bg-white border-gray-300 rounded focus:ring-indigo-500 accent-indigo-600">
+                                    <div>
+                                        <div class="text-sm font-semibold text-gray-700">
+                                            <i class="fas fa-volume-up text-indigo-500 mr-2"></i>
+                                            Voice Activity Detection
+                                        </div>
+                                        <div class="text-xs text-gray-400 mt-0.5">Filter out silence</div>
+                                    </div>
+                                </label>
                             </div>
                         </div>
                     </div>
-                    <button id="remove-file" class="bg-red-100 hover:bg-red-200 text-red-600 p-2 rounded-lg transition-colors">
-                        <i class="fas fa-times text-lg"></i>
-                    </button>
                 </div>
-            </div>
 
-            <!-- Processing Options -->
-            <div class="bg-gray-50 rounded-xl p-6 mb-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <i class="fas fa-cogs text-blue-600 mr-2"></i>
-                    Processing Options
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="model-select" class="block text-sm font-semibold text-gray-700 mb-3">
-                            <i class="fas fa-brain text-purple-600 mr-2"></i>
-                            Whisper Model
-                        </label>
-                        <select id="model-select" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white shadow-sm">
-                            <option value="tiny">🚀 Tiny (Fastest)</option>
-                            <option value="base">⚡ Base</option>
-                            <option value="small" selected>⭐ Small (Recommended)</option>
-                            <option value="medium">🎯 Medium</option>
-                            <option value="large">🎖️ Large (Most Accurate)</option>
-                            <option value="large-v2">🏆 Large v2</option>
-                            <option value="large-v3">👑 Large v3</option>
-                        </select>
+                <!-- Optional Instructions -->
+                <div class="result-card mb-8" style="transform: rotateX(1deg) rotateY(0deg);">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-bullseye text-indigo-500 mr-2"></i>
+                        <h4 class="text-lg font-bold text-gray-800">Optional Instructions</h4>
                     </div>
+                    <textarea id="instructions-input" rows="3" class="crystal-input" placeholder="Tell the clip selector what to do or prioritize (e.g., 'Prefer definitions', 'Keep the first sentence', 'Avoid sponsor mentions')"></textarea>
+                </div>
 
-                    <div>
-                        <label for="language-select" class="block text-sm font-semibold text-gray-700 mb-3">
-                            <i class="fas fa-globe text-green-600 mr-2"></i>
-                            Language (Optional)
-                        </label>
-                        <select id="language-select" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white shadow-sm">
-                            <option value="">🔍 Auto-detect</option>
-                            <option value="en">🇺🇸 English</option>
-                            <option value="es">🇪🇸 Spanish</option>
-                            <option value="fr">🇫🇷 French</option>
-                            <option value="de">🇩🇪 German</option>
-                            <option value="it">🇮🇹 Italian</option>
-                            <option value="pt">🇵🇹 Portuguese</option>
-                            <option value="ru">🇷🇺 Russian</option>
-                            <option value="ja">🇯🇵 Japanese</option>
-                            <option value="ko">🇰🇷 Korean</option>
-                            <option value="zh">🇨🇳 Chinese</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="compute-type" class="block text-sm font-semibold text-gray-700 mb-3">
-                            <i class="fas fa-microchip text-orange-600 mr-2"></i>
-                            Compute Type
-                        </label>
-                        <select id="compute-type" class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-white shadow-sm">
-                            <option value="int8_float16">🚀 GPU Optimized</option>
-                            <option value="int8">💻 CPU Only</option>
-                            <option value="float16">⚡ GPU High Precision</option>
-                        </select>
-                    </div>
-
+                <!-- Upload Button (3D pushable) -->
+                <button id="upload-btn" class="w-full py-4 px-6 btn-3d text-lg rounded-xl" disabled>
                     <div class="flex items-center justify-center">
-                        <div class="bg-white p-4 rounded-lg border border-gray-300 shadow-sm">
-                            <label for="vad-filter" class="flex items-center cursor-pointer">
-                                <input type="checkbox" id="vad-filter" class="mr-3 w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <div>
-                                    <div class="text-sm font-semibold text-gray-700">
-                                        <i class="fas fa-volume-up text-blue-600 mr-2"></i>
-                                        Voice Activity Detection
-                                    </div>
-                                    <div class="text-xs text-gray-500">Filter out silence</div>
-                                </div>
-                            </label>
-                        </div>
+                        <i class="fas fa-magic mr-3 text-xl"></i>
+                        <span class="font-bold">Create Clips</span>
                     </div>
-                </div>
+                    <div class="text-sm opacity-80 mt-1 font-medium">Powered by Whisper + GPT</div>
+                </button>
             </div>
-
-            <!-- Optional Instructions -->
-            <div class="result-card mb-8">
-                <div class="flex items-center mb-4">
-                    <i class="fas fa-bullseye text-indigo-600 mr-2"></i>
-                    <h4 class="text-lg font-semibold text-gray-900">Optional Instructions</h4>
-                </div>
-                <textarea id="instructions-input" rows="3" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Tell the clip selector what to do or prioritize (e.g., 'Prefer definitions', 'Keep the first sentence', 'Avoid sponsor mentions')"></textarea>
-            </div>
-
-            <!-- Upload Button -->
-            <button id="upload-btn" class="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:shadow-lg" disabled>
-                <div class="flex items-center justify-center">
-                    <i class="fas fa-magic mr-3 text-xl"></i>
-                    <span class="text-lg">Create Clips</span>
-                </div>
-                <div class="text-sm opacity-90 mt-1">Powered by Whisper + GPT</div>
-            </button>
         </div>
 
         <!-- Progress Section -->
-        <div id="progress-section" class="hidden result-card mb-8">
-            <div class="text-center">
-                <div class="relative mb-6">
-                    <div class="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 rounded-full blur-lg opacity-30"></div>
-                    <div class="relative bg-gradient-to-r from-blue-500 to-indigo-600 p-4 rounded-full inline-block">
-                        <div class="loading-spinner mr-3"></div>
+        <div id="progress-section" class="hidden perspective-container animate-enter">
+            <div class="crystal-card mb-10 parallax-card">
+                <div class="text-center">
+                    <div class="relative mb-6 inline-block">
+                        <div class="absolute inset-0 bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-400 rounded-full blur-xl opacity-40 animate-pulse-prism"></div>
+                        <div class="relative prism-badge p-5 rounded-full">
+                            <div class="loading-spinner"></div>
+                        </div>
                     </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2 text-shadow-depth">Finding the Best Clips</h3>
+                    <p id="progress-text" class="text-gray-500 mb-8">Transcribing, selecting short-form moments, and preparing downloads...</p>
+
+                    <!-- 3D Tube Progress Bar -->
+                    <div class="progress-tube">
+                        <div id="progress-fill" class="progress-tube-fill" style="width: 0%"></div>
+                    </div>
+
+                    <p class="text-sm text-gray-400 mt-4">This may take a few minutes depending on file size and model</p>
                 </div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Finding the Best Clips</h3>
-                <p id="progress-text" class="text-gray-600 mb-6">Transcribing, selecting short‑form moments, and preparing downloads…</p>
-                <div class="bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner">
-                    <div id="progress-fill" class="h-full bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
-                </div>
-                <p class="text-sm text-gray-500 mt-3">This may take a few minutes depending on file size and model</p>
             </div>
         </div>
 
-            <!-- Results Section -->
-            <div id="results-section" class="hidden">
-                <!-- Final Clip Player -->
-                <div id="final-video-card" class="result-card mb-8 hidden">
+        <!-- Results Section -->
+        <div id="results-section" class="hidden">
+            <!-- Final Clip Player -->
+            <div id="final-video-card" class="hidden perspective-container animate-enter mb-10">
+                <div class="crystal-card">
                     <div class="flex items-center mb-4">
-                        <i class="fas fa-film text-indigo-600 mr-2"></i>
-                        <h4 class="text-lg font-semibold text-gray-900">Final Clip (Chronological)</h4>
+                        <div class="prism-badge mr-3 p-2 rounded-lg">
+                            <i class="fas fa-film text-white text-lg"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900">Final Clip (Chronological)</h4>
                     </div>
-                    <video id="final-video" class="w-full rounded-xl border border-gray-300 bg-black" controls playsinline></video>
+                    <video id="final-video" class="w-full rounded-xl border border-white/40 bg-black shadow-lg" controls playsinline></video>
                     <div class="mt-4">
-                        <a id="download-final" class="inline-flex items-center bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition-colors" download>
+                        <a id="download-final" class="download-btn inline-flex items-center w-auto" download>
                             <i class="fas fa-download mr-2"></i>Download Final Clip
                         </a>
                     </div>
                 </div>
-                <div class="text-center mb-8">
-                <div class="relative mb-4">
-                    <div class="absolute inset-0 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full blur-lg opacity-30"></div>
-                    <div class="relative bg-gradient-to-r from-green-500 to-emerald-600 p-4 rounded-full inline-block">
+            </div>
+
+            <!-- Success Banner -->
+            <div class="text-center mb-10 animate-enter animate-enter-delay-1">
+                <div class="relative mb-5 inline-block">
+                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-teal-500 rounded-full blur-xl opacity-40"></div>
+                    <div class="relative p-5 rounded-full inline-flex items-center justify-center" style="background: linear-gradient(135deg, #10b981, #14b8a6);">
                         <i class="fas fa-check text-white text-3xl"></i>
                     </div>
                 </div>
-                <h3 class="text-3xl font-bold text-gray-900 mb-2">Your Clips Are Ready!</h3>
-                <p class="text-gray-600">We generated captions and candidate short‑form videos</p>
+                <h3 class="text-3xl font-extrabold gradient-text mb-3">Your Clips Are Ready!</h3>
+                <p class="text-gray-500">We generated captions and candidate short-form videos</p>
             </div>
-            
+
             <!-- Job Info -->
-            <div class="result-card mb-8">
-                <div class="flex items-center mb-4">
-                    <i class="fas fa-info-circle text-blue-600 mr-2"></i>
-                    <h4 class="text-lg font-semibold text-gray-900">Job Information</h4>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-blue-50 p-4 rounded-lg">
-                        <span class="text-sm font-medium text-blue-600">Job ID</span>
-                        <p id="job-id" class="text-sm text-gray-900 font-mono bg-white p-2 rounded mt-1"></p>
+            <div class="perspective-container animate-enter animate-enter-delay-2 mb-10">
+                <div class="crystal-card">
+                    <div class="flex items-center mb-5">
+                        <div class="prism-badge mr-3 p-2 rounded-lg" style="background: linear-gradient(135deg, #3b82f6, #6366f1);">
+                            <i class="fas fa-info-circle text-white text-lg"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-gray-900">Job Information</h4>
                     </div>
-                    <div class="bg-green-50 p-4 rounded-lg">
-                        <span class="text-sm font-medium text-green-600">Status</span>
-                        <p id="job-status" class="text-sm text-green-700 font-semibold mt-1 flex items-center">
-                            <i class="fas fa-check-circle mr-2"></i>Completed Successfully
-                        </p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="file-info-card">
+                            <span class="text-xs font-bold text-indigo-500 uppercase tracking-wider">Job ID</span>
+                            <p id="job-id" class="text-sm text-gray-900 font-mono bg-white/60 p-2.5 rounded-lg mt-2 border border-indigo-100"></p>
+                        </div>
+                        <div class="file-info-card" style="background: linear-gradient(135deg, rgba(16, 185, 129, 0.06), rgba(20, 184, 166, 0.06));">
+                            <span class="text-xs font-bold text-emerald-500 uppercase tracking-wider">Status</span>
+                            <p id="job-status" class="text-sm text-emerald-700 font-bold mt-2 flex items-center">
+                                <i class="fas fa-check-circle mr-2"></i>Completed Successfully
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Download Files -->
-            <div class="result-card">
-                <div class="flex items-center mb-6">
-                    <i class="fas fa-download text-blue-600 mr-2"></i>
-                    <h4 class="text-xl font-semibold text-gray-900">Download Your Files</h4>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div class="download-item bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                        <div class="text-center">
-                            <div class="bg-blue-500 p-3 rounded-full inline-block mb-4">
-                                <i class="fas fa-file-text text-white text-2xl"></i>
+            <!-- Download Files (3D Crystal Shard Grid) -->
+            <div class="perspective-container animate-enter animate-enter-delay-3 mb-10">
+                <div class="crystal-card">
+                    <div class="flex items-center mb-8">
+                        <div class="prism-badge mr-3 p-2 rounded-lg">
+                            <i class="fas fa-download text-white text-lg"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-gray-900">Download Your Files</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 download-grid" style="perspective: 1000px;">
+
+                        <!-- Transcript -->
+                        <div class="download-shard">
+                            <div class="relative mb-4 inline-block">
+                                <div class="absolute inset-0 rounded-full blur-lg opacity-30" style="background: linear-gradient(135deg, #3b82f6, #6366f1);"></div>
+                                <div class="relative p-3 rounded-full inline-flex" style="background: linear-gradient(135deg, #3b82f6, #6366f1);">
+                                    <i class="fas fa-file-alt text-white text-2xl"></i>
+                                </div>
                             </div>
-                            <h5 class="font-semibold text-gray-900 mb-2">Full Transcript</h5>
-                            <p class="text-sm text-gray-600 mb-4">Complete text transcript</p>
-                            <a id="download-txt" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors inline-block text-center">
+                            <h5 class="font-bold text-gray-900 mb-1">Full Transcript</h5>
+                            <p class="text-sm text-gray-400 mb-4">Complete text transcript</p>
+                            <a id="download-txt" class="download-btn">
                                 <i class="fas fa-download mr-2"></i>Download TXT
                             </a>
                         </div>
-                    </div>
 
-                    <div class="download-item bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-xl border border-green-200 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                        <div class="text-center">
-                            <div class="bg-green-500 p-3 rounded-full inline-block mb-4">
-                                <i class="fas fa-list text-white text-2xl"></i>
+                        <!-- Segments -->
+                        <div class="download-shard">
+                            <div class="relative mb-4 inline-block">
+                                <div class="absolute inset-0 rounded-full blur-lg opacity-30" style="background: linear-gradient(135deg, #10b981, #14b8a6);"></div>
+                                <div class="relative p-3 rounded-full inline-flex" style="background: linear-gradient(135deg, #10b981, #14b8a6);">
+                                    <i class="fas fa-list text-white text-2xl"></i>
+                                </div>
                             </div>
-                            <h5 class="font-semibold text-gray-900 mb-2">Segments</h5>
-                            <p class="text-sm text-gray-600 mb-4">Timestamped segments (JSON)</p>
-                            <a id="download-segments" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors inline-block text-center">
+                            <h5 class="font-bold text-gray-900 mb-1">Segments</h5>
+                            <p class="text-sm text-gray-400 mb-4">Timestamped segments (JSON)</p>
+                            <a id="download-segments" class="download-btn">
                                 <i class="fas fa-download mr-2"></i>Download JSON
                             </a>
                         </div>
-                    </div>
 
-                    <div class="download-item bg-gradient-to-br from-purple-50 to-purple-100 p-6 rounded-xl border border-purple-200 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                        <div class="text-center">
-                            <div class="bg-purple-500 p-3 rounded-full inline-block mb-4">
-                                <i class="fas fa-align-left text-white text-2xl"></i>
+                        <!-- Word Timestamps -->
+                        <div class="download-shard">
+                            <div class="relative mb-4 inline-block">
+                                <div class="absolute inset-0 rounded-full blur-lg opacity-30" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);"></div>
+                                <div class="relative p-3 rounded-full inline-flex" style="background: linear-gradient(135deg, #8b5cf6, #a855f7);">
+                                    <i class="fas fa-align-left text-white text-2xl"></i>
+                                </div>
                             </div>
-                            <h5 class="font-semibold text-gray-900 mb-2">Word Timestamps</h5>
-                            <p class="text-sm text-gray-600 mb-4">Individual word timestamps</p>
-                            <a id="download-words" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors inline-block text-center">
+                            <h5 class="font-bold text-gray-900 mb-1">Word Timestamps</h5>
+                            <p class="text-sm text-gray-400 mb-4">Individual word timestamps</p>
+                            <a id="download-words" class="download-btn">
                                 <i class="fas fa-download mr-2"></i>Download JSON
                             </a>
                         </div>
-                    </div>
 
-                    <div class="download-item bg-gradient-to-br from-red-50 to-red-100 p-6 rounded-xl border border-red-200 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                        <div class="text-center">
-                            <div class="bg-red-500 p-3 rounded-full inline-block mb-4">
-                                <i class="fas fa-closed-captioning text-white text-2xl"></i>
+                        <!-- SRT Subtitles -->
+                        <div class="download-shard">
+                            <div class="relative mb-4 inline-block">
+                                <div class="absolute inset-0 rounded-full blur-lg opacity-30" style="background: linear-gradient(135deg, #ef4444, #ec4899);"></div>
+                                <div class="relative p-3 rounded-full inline-flex" style="background: linear-gradient(135deg, #ef4444, #ec4899);">
+                                    <i class="fas fa-closed-captioning text-white text-2xl"></i>
+                                </div>
                             </div>
-                            <h5 class="font-semibold text-gray-900 mb-2">SRT Subtitles</h5>
-                            <p class="text-sm text-gray-600 mb-4">Standard subtitle format</p>
-                            <a id="download-srt" class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors inline-block text-center">
+                            <h5 class="font-bold text-gray-900 mb-1">SRT Subtitles</h5>
+                            <p class="text-sm text-gray-400 mb-4">Standard subtitle format</p>
+                            <a id="download-srt" class="download-btn">
                                 <i class="fas fa-download mr-2"></i>Download SRT
                             </a>
                         </div>
-                    </div>
 
-                    <div class="download-item bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
-                        <div class="text-center">
-                            <div class="bg-orange-500 p-3 rounded-full inline-block mb-4">
-                                <i class="fas fa-closed-captioning text-white text-2xl"></i>
+                        <!-- VTT Subtitles -->
+                        <div class="download-shard">
+                            <div class="relative mb-4 inline-block">
+                                <div class="absolute inset-0 rounded-full blur-lg opacity-30" style="background: linear-gradient(135deg, #f97316, #eab308);"></div>
+                                <div class="relative p-3 rounded-full inline-flex" style="background: linear-gradient(135deg, #f97316, #eab308);">
+                                    <i class="fas fa-closed-captioning text-white text-2xl"></i>
+                                </div>
                             </div>
-                            <h5 class="font-semibold text-gray-900 mb-2">VTT Subtitles</h5>
-                            <p class="text-sm text-gray-600 mb-4">Web video subtitle format</p>
-                            <a id="download-vtt" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2 px-4 rounded-lg transition-colors inline-block text-center">
+                            <h5 class="font-bold text-gray-900 mb-1">VTT Subtitles</h5>
+                            <p class="text-sm text-gray-400 mb-4">Web video subtitle format</p>
+                            <a id="download-vtt" class="download-btn">
                                 <i class="fas fa-download mr-2"></i>Download VTT
                             </a>
                         </div>
+
                     </div>
                 </div>
             </div>
 
             <!-- New Upload Button -->
-            <div class="mt-12 text-center">
-                <button id="new-upload-btn" class="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+            <div class="mt-12 text-center animate-enter animate-enter-delay-4">
+                <button id="new-upload-btn" class="btn-3d py-4 px-10 text-lg rounded-xl">
                     <i class="fas fa-plus mr-3"></i>
                     Create Another Clip
                 </button>
@@ -339,56 +404,77 @@
         </div>
 
         <!-- Error Section -->
-        <div id="error-section" class="hidden result-card">
-            <div class="text-center">
-                <div class="relative mb-6">
-                    <div class="absolute inset-0 bg-gradient-to-r from-red-400 to-pink-500 rounded-full blur-lg opacity-30"></div>
-                    <div class="relative bg-gradient-to-r from-red-500 to-pink-600 p-4 rounded-full inline-block">
-                        <i class="fas fa-exclamation-triangle text-white text-3xl"></i>
+        <div id="error-section" class="hidden perspective-container animate-enter">
+            <div class="crystal-card">
+                <div class="text-center">
+                    <div class="relative mb-6 inline-block">
+                        <div class="absolute inset-0 bg-gradient-to-r from-red-400 to-pink-500 rounded-full blur-xl opacity-40"></div>
+                        <div class="relative p-5 rounded-full inline-flex" style="background: linear-gradient(135deg, #ef4444, #ec4899);">
+                            <i class="fas fa-exclamation-triangle text-white text-3xl"></i>
+                        </div>
                     </div>
+                    <h3 class="text-2xl font-bold text-red-900 mb-2 text-shadow-depth">Oops! Something went wrong</h3>
+                    <p id="error-message" class="text-red-600 mb-6"></p>
+                    <button id="retry-btn" class="btn-3d py-3 px-8 rounded-xl" style="background: linear-gradient(135deg, #ef4444 0%, #ec4899 100%); box-shadow: 0 6px 0 rgba(185, 28, 28, 0.4), 0 8px 20px rgba(239, 68, 68, 0.25), inset 0 1px 0 rgba(255,255,255,0.25);">
+                        <i class="fas fa-redo mr-2"></i>
+                        Try Again
+                    </button>
                 </div>
-                <h3 class="text-2xl font-bold text-red-900 mb-2">Oops! Something went wrong</h3>
-                <p id="error-message" class="text-red-700 mb-6"></p>
-                <button id="retry-btn" class="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white font-semibold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                    <i class="fas fa-redo mr-2"></i>
-                    Try Again
-                </button>
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gradient-to-r from-gray-900 to-gray-800 text-white mt-16">
+    <footer class="crystal-footer text-white mt-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="text-center">
-                <div class="flex items-center justify-center mb-4">
-                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 rounded-xl mr-3">
-                        <i class="fas fa-closed-captioning text-white text-xl"></i>
+                <div class="flex items-center justify-center mb-5">
+                    <div class="prism-badge rounded-xl mr-3 p-2.5">
+                        <i class="fas fa-seedling text-white text-lg"></i>
                     </div>
-                    <h3 class="text-xl font-bold">Short‑Form Content Creator</h3>
+                    <h3 class="text-xl font-bold gradient-text">ClipFarm</h3>
                 </div>
-                <p class="text-gray-300 mb-4">Turn long videos into scroll‑stopping shorts with captions</p>
-                <div class="flex items-center justify-center space-x-6 text-sm text-gray-400">
+                <p class="text-gray-400 mb-5 text-sm">Turn long videos into scroll-stopping shorts with captions</p>
+                <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-500">
                     <span class="flex items-center">
-                        <i class="fas fa-brain mr-2"></i>
+                        <i class="fas fa-brain mr-2 text-indigo-400"></i>
                         Powered by Whisper + GPT
                     </span>
                     <span class="flex items-center">
-                        <i class="fas fa-code mr-2"></i>
+                        <i class="fas fa-code mr-2 text-purple-400"></i>
                         Built with FastAPI & Node.js
                     </span>
                     <span class="flex items-center">
-                        <i class="fas fa-palette mr-2"></i>
+                        <i class="fas fa-palette mr-2 text-pink-400"></i>
                         Styled with Tailwind CSS
                     </span>
                 </div>
-                <div class="border-t border-gray-700 mt-6 pt-6">
-                    <p class="text-gray-400">&copy; 2024 Short‑Form Content Creator. All rights reserved.</p>
-                </div>
+                <div class="holo-divider mt-8 mb-6"></div>
+                <p class="text-gray-500 text-sm">&copy; 2025 ClipFarm. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script src="/js/app.js"></script>
+
+    <!-- Mouse parallax effect (separate from app.js) -->
+    <script>
+    (function() {
+        var root = document.documentElement;
+        var cx = 0, cy = 0, tx = 0, ty = 0;
+        document.addEventListener('mousemove', function(e) {
+            tx = (e.clientX / window.innerWidth - 0.5) * 2;
+            ty = (e.clientY / window.innerHeight - 0.5) * 2;
+        });
+        function tick() {
+            cx += (tx - cx) * 0.08;
+            cy += (ty - cy) * 0.08;
+            root.style.setProperty('--mouse-x', cx.toFixed(3));
+            root.style.setProperty('--mouse-y', cy.toFixed(3));
+            requestAnimationFrame(tick);
+        }
+        tick();
+    })();
+    </script>
 </body>
 </html>
