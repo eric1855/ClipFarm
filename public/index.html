@@ -3,469 +3,437 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ClipFarm - AI Video Clip Extractor</title>
+    <title>CLIPFARM - Retro Arcade</title>
     <link href="/css/output.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-cream-50 min-h-screen font-brutal noise-bg">
+<body class="bg-arcade-bg min-h-screen font-pixel arcade-body">
 
-    <!-- Decorative Marquee Strip -->
-    <div class="marquee-strip bg-electric-yellow border-b-4 border-jet overflow-hidden py-2">
-        <div class="marquee-content animate-marquee whitespace-nowrap">
-            <span class="inline-block mx-8 text-jet font-black text-sm tracking-widest uppercase">
-                <i class="fas fa-scissors mr-2"></i> CLIP IT <i class="fas fa-star mx-4"></i> FARM IT <i class="fas fa-bolt mx-4"></i> SHIP IT <i class="fas fa-fire mx-4"></i> AI POWERED <i class="fas fa-star mx-4"></i> WHISPER + GPT <i class="fas fa-bolt mx-4"></i> EXTRACT CLIPS <i class="fas fa-fire mx-4"></i> AUTO CAPTIONS <i class="fas fa-scissors mx-4"></i> CLIP IT <i class="fas fa-star mx-4"></i> FARM IT <i class="fas fa-bolt mx-4"></i> SHIP IT <i class="fas fa-fire mx-4"></i> AI POWERED <i class="fas fa-star mx-4"></i> WHISPER + GPT <i class="fas fa-bolt mx-4"></i> EXTRACT CLIPS <i class="fas fa-fire mx-4"></i> AUTO CAPTIONS
-            </span>
-        </div>
-    </div>
+    <!-- CRT Overlay (scanlines + vignette) -->
+    <div class="crt-overlay"></div>
 
-    <!-- Header -->
-    <header class="bg-white border-b-4 border-jet sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-4">
-                <div class="flex items-center gap-4">
-                    <!-- Logo Badge -->
-                    <div class="logo-badge bg-electric-yellow border-4 border-jet shadow-brutal-sm px-4 py-2 inline-block transform -rotate-2 hover:rotate-1 transition-transform">
-                        <h1 class="text-2xl sm:text-3xl font-black text-jet tracking-tight uppercase">
-                            <i class="fas fa-seedling mr-1"></i> ClipFarm
+    <!-- Twinkling Stars Background -->
+    <div class="stars-container" id="stars-container"></div>
+
+    <!-- Arcade Cabinet Frame -->
+    <div class="arcade-cabinet animate-crt-flicker">
+
+        <!-- Header / Title Screen -->
+        <header class="arcade-header relative">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <!-- Title -->
+                    <div class="flex items-center gap-3">
+                        <h1 class="text-lg sm:text-2xl text-arcade-yellow tracking-wider arcade-title-glow">
+                            CLIPFARM
                         </h1>
                     </div>
-                    <p class="hidden sm:block text-jet font-bold text-sm uppercase tracking-wide mt-1">AI Clip Extractor</p>
-                </div>
-                <div class="flex items-center gap-3">
-                    <!-- AI Badge -->
-                    <div class="hidden sm:block bg-coral border-3 border-jet text-white font-black text-xs uppercase px-3 py-1 transform rotate-2 shadow-brutal-sm">
-                        AI Powered <i class="fas fa-robot ml-1"></i>
-                    </div>
-                    <div id="connection-status" class="flex items-center px-4 py-2 bg-cream-100 border-3 border-jet shadow-brutal-sm">
-                        <div class="w-3 h-3 bg-gray-400 border-2 border-jet rounded-full mr-2 animate-pulse"></div>
-                        <span class="text-sm text-jet font-bold">Checking...</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-
-        <!-- Hero Section -->
-        <div class="text-center mb-10 relative">
-            <div class="inline-block relative">
-                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black text-jet uppercase leading-tight">
-                    Turn Long Videos<br>
-                    <span class="wavy-underline">Into Viral Clips</span>
-                </h2>
-                <!-- Decorative "NEW" sticker -->
-                <div class="absolute -top-4 -right-8 sm:-right-12 bg-coral text-white font-black text-xs uppercase px-3 py-1 rounded-full border-3 border-jet shadow-brutal-sm transform rotate-12 animate-wiggle">
-                    NEW!
-                </div>
-            </div>
-            <p class="text-lg sm:text-xl text-jet font-bold mt-4 max-w-xl mx-auto transform -rotate-1">
-                Upload. Transcribe. Extract. Download. <span class="bg-electric-yellow px-2 border-b-3 border-jet">It's that easy.</span>
-            </p>
-        </div>
-
-        <!-- Upload Section Card -->
-        <div class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-
-            <!-- Section Header -->
-            <div class="flex items-center mb-6 gap-3">
-                <div class="step-number bg-electric-lime border-4 border-jet w-12 h-12 flex items-center justify-center shadow-brutal-sm transform -rotate-3">
-                    <span class="text-2xl font-black text-jet">1</span>
-                </div>
-                <div>
-                    <h2 class="text-2xl sm:text-3xl font-black text-jet uppercase">Upload Your Video</h2>
-                    <p class="text-jet font-bold text-sm">Drop a file and let the AI do its thing</p>
-                </div>
-                <!-- Sticker -->
-                <div class="hidden md:block ml-auto bg-electric-blue text-white font-black text-xs uppercase px-3 py-1 border-3 border-jet shadow-brutal-sm transform rotate-3">
-                    <i class="fas fa-magic mr-1"></i> Auto-Magic
-                </div>
-            </div>
-
-            <!-- File Upload Area -->
-            <div id="upload-area" class="upload-area mb-6 group cursor-pointer">
-                <div class="upload-content text-center">
-                    <div class="mb-6 inline-block">
-                        <div class="bg-electric-yellow border-4 border-jet p-6 shadow-brutal-sm inline-block transform group-hover:-rotate-3 transition-transform duration-200">
-                            <i class="fas fa-cloud-upload-alt text-5xl sm:text-6xl text-jet"></i>
+                    <!-- Score + Lives + Status -->
+                    <div class="flex items-center gap-4 sm:gap-6">
+                        <div class="hidden sm:block text-arcade-yellow text-[10px]">
+                            SCORE: <span class="text-arcade-white">000000</span>
+                        </div>
+                        <div class="hidden sm:block text-[10px] text-arcade-red">
+                            <span class="heart-display">&#9829;&#9829;&#9829;</span>
+                        </div>
+                        <div id="connection-status" class="flex items-center px-3 py-1 border-2 border-arcade-dim">
+                            <div class="w-2 h-2 bg-arcade-dim mr-2 animate-blink"></div>
+                            <span class="text-[8px] sm:text-[10px] text-arcade-dim">CHECKING...</span>
                         </div>
                     </div>
-                    <h3 class="text-xl sm:text-2xl font-black text-jet uppercase mb-2">Drop Your File Here</h3>
-                    <p class="text-jet font-bold mb-5">or click to browse your computer</p>
-                    <div class="flex flex-wrap justify-center gap-2 mb-5">
-                        <span class="file-badge bg-electric-yellow">MP4</span>
-                        <span class="file-badge bg-electric-lime">AVI</span>
-                        <span class="file-badge bg-electric-purple text-white">MOV</span>
-                        <span class="file-badge bg-coral text-white">WAV</span>
-                        <span class="file-badge bg-electric-blue text-white">MP3</span>
-                        <span class="file-badge bg-cream-200">M4A</span>
-                    </div>
-                    <div class="inline-block bg-cream-100 border-3 border-jet px-4 py-2 shadow-brutal-sm">
-                        <p class="text-sm text-jet font-bold">
-                            <i class="fas fa-info-circle mr-2"></i>
-                            Maximum file size: 100MB
-                        </p>
-                    </div>
-                    <input type="file" id="file-input" class="hidden" accept=".mp4,.avi,.mov,.mkv,.wav,.mp3,.m4a,.flac,.ogg">
+                </div>
+
+                <!-- Blinking INSERT COIN / PRESS START -->
+                <div class="text-center mt-2">
+                    <span class="text-[10px] text-arcade-cyan animate-blink">- PRESS START -</span>
                 </div>
             </div>
+        </header>
 
-            <!-- Selected File Info -->
-            <div id="file-info" class="hidden mb-6 bg-electric-lime border-4 border-jet shadow-brutal p-5">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="bg-jet p-3 border-3 border-jet">
-                            <i class="fas fa-file-video text-electric-yellow text-2xl"></i>
-                        </div>
-                        <div>
-                            <p id="file-name" class="font-black text-jet text-lg uppercase"></p>
-                            <p id="file-size" class="text-sm text-jet font-bold"></p>
-                            <div class="flex items-center mt-1">
-                                <div class="w-3 h-3 bg-jet rounded-full mr-2"></div>
-                                <span class="text-xs text-jet font-black uppercase">Ready to process</span>
+        <!-- Main Content -->
+        <main class="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+
+            <!-- Stage 1: INSERT VIDEO -->
+            <div class="arcade-panel p-5 sm:p-8 mb-8">
+
+                <!-- Stage Header -->
+                <div class="flex items-center mb-6 gap-3">
+                    <div class="stage-badge bg-arcade-yellow text-arcade-bg">
+                        <span class="text-[10px]">STAGE 1</span>
+                    </div>
+                    <h2 class="text-sm sm:text-base text-arcade-green">INSERT VIDEO</h2>
+                </div>
+
+                <!-- File Upload Area (coin slot) -->
+                <div id="upload-area" class="upload-area mb-6 group cursor-pointer">
+                    <div class="text-center">
+                        <div class="mb-5 inline-block">
+                            <div class="coin-slot-icon">
+                                <span class="text-3xl sm:text-4xl">&#9658;</span>
                             </div>
                         </div>
+                        <h3 class="text-xs sm:text-sm text-arcade-cyan mb-3">INSERT VIDEO CARTRIDGE</h3>
+                        <p class="text-[10px] text-arcade-dim mb-5">CLICK OR DROP FILE HERE</p>
+                        <div class="flex flex-wrap justify-center gap-2 mb-5">
+                            <span class="file-badge badge-yellow">MP4</span>
+                            <span class="file-badge badge-green">AVI</span>
+                            <span class="file-badge badge-pink">MOV</span>
+                            <span class="file-badge badge-red">WAV</span>
+                            <span class="file-badge badge-cyan">MP3</span>
+                            <span class="file-badge badge-orange">M4A</span>
+                        </div>
+                        <div class="inline-block border-2 border-arcade-dim px-3 py-1">
+                            <p class="text-[8px] text-arcade-dim">MAX FILE SIZE: 100MB</p>
+                        </div>
+                        <input type="file" id="file-input" class="hidden" accept=".mp4,.avi,.mov,.mkv,.wav,.mp3,.m4a,.flac,.ogg">
                     </div>
-                    <button id="remove-file" class="bg-coral border-3 border-jet text-white p-2 shadow-brutal-sm hover:shadow-brutal-active hover:translate-x-1 hover:translate-y-1 transition-all">
-                        <i class="fas fa-times text-lg"></i>
-                    </button>
                 </div>
-            </div>
 
-            <!-- Processing Options -->
-            <div class="bg-cream-100 border-4 border-jet p-6 mb-6 shadow-brutal-sm">
-                <div class="flex items-center mb-5 gap-3">
-                    <div class="step-number bg-coral text-white border-4 border-jet w-12 h-12 flex items-center justify-center shadow-brutal-sm transform rotate-2">
-                        <span class="text-2xl font-black">2</span>
-                    </div>
-                    <h3 class="text-xl sm:text-2xl font-black text-jet uppercase">Processing Options</h3>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div>
-                        <label for="model-select" class="block text-sm font-black text-jet mb-2 uppercase tracking-wide">
-                            <i class="fas fa-brain text-electric-purple mr-2"></i>
-                            Whisper Model
-                        </label>
-                        <select id="model-select" class="brutal-select w-full">
-                            <option value="tiny">Tiny (Fastest)</option>
-                            <option value="base">Base</option>
-                            <option value="small" selected>Small (Recommended)</option>
-                            <option value="medium">Medium</option>
-                            <option value="large">Large (Most Accurate)</option>
-                            <option value="large-v2">Large v2</option>
-                            <option value="large-v3">Large v3</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="language-select" class="block text-sm font-black text-jet mb-2 uppercase tracking-wide">
-                            <i class="fas fa-globe text-electric-lime mr-2"></i>
-                            Language
-                        </label>
-                        <select id="language-select" class="brutal-select w-full">
-                            <option value="">Auto-detect</option>
-                            <option value="en">English</option>
-                            <option value="es">Spanish</option>
-                            <option value="fr">French</option>
-                            <option value="de">German</option>
-                            <option value="it">Italian</option>
-                            <option value="pt">Portuguese</option>
-                            <option value="ru">Russian</option>
-                            <option value="ja">Japanese</option>
-                            <option value="ko">Korean</option>
-                            <option value="zh">Chinese</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label for="compute-type" class="block text-sm font-black text-jet mb-2 uppercase tracking-wide">
-                            <i class="fas fa-microchip text-coral mr-2"></i>
-                            Compute Type
-                        </label>
-                        <select id="compute-type" class="brutal-select w-full">
-                            <option value="int8_float16">GPU Optimized</option>
-                            <option value="int8">CPU Only</option>
-                            <option value="float16">GPU High Precision</option>
-                        </select>
-                    </div>
-
-                    <div class="flex items-center justify-center">
-                        <div class="bg-white p-4 border-4 border-jet shadow-brutal-sm w-full">
-                            <label for="vad-filter" class="flex items-center cursor-pointer">
-                                <input type="checkbox" id="vad-filter" class="brutal-checkbox mr-3 w-6 h-6 accent-electric-yellow">
-                                <div>
-                                    <div class="text-sm font-black text-jet uppercase">
-                                        <i class="fas fa-volume-up text-electric-blue mr-2"></i>
-                                        Voice Detection
-                                    </div>
-                                    <div class="text-xs text-jet font-bold">Filter out silence</div>
+                <!-- Selected File Info -->
+                <div id="file-info" class="hidden mb-6 border-4 border-arcade-green bg-arcade-bg p-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="text-arcade-green text-xl">&#9654;</div>
+                            <div>
+                                <p id="file-name" class="text-[10px] text-arcade-green uppercase"></p>
+                                <p id="file-size" class="text-[8px] text-arcade-dim mt-1"></p>
+                                <div class="flex items-center mt-1">
+                                    <span class="text-[8px] text-arcade-yellow animate-blink">CARTRIDGE LOADED!</span>
                                 </div>
+                            </div>
+                        </div>
+                        <button id="remove-file" class="border-2 border-arcade-red text-arcade-red px-2 py-1 text-[8px] hover:bg-arcade-red hover:text-arcade-bg transition-colors">
+                            EJECT
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Settings (Processing Options) -->
+                <div class="border-4 border-arcade-cyan bg-arcade-bg p-4 sm:p-5 mb-6">
+                    <div class="flex items-center mb-4 gap-2">
+                        <span class="text-arcade-cyan text-sm">&#9881;</span>
+                        <h3 class="text-[10px] sm:text-xs text-arcade-cyan">GAME SETTINGS</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="model-select" class="block text-[8px] text-arcade-yellow mb-2 uppercase">
+                                WHISPER MODEL
                             </label>
+                            <select id="model-select" class="arcade-select w-full">
+                                <option value="tiny">TINY (FASTEST)</option>
+                                <option value="base">BASE</option>
+                                <option value="small" selected>SMALL (RECOMMENDED)</option>
+                                <option value="medium">MEDIUM</option>
+                                <option value="large">LARGE (ACCURATE)</option>
+                                <option value="large-v2">LARGE V2</option>
+                                <option value="large-v3">LARGE V3</option>
+                            </select>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Optional Instructions -->
-            <div class="bg-white border-4 border-jet p-6 mb-6 shadow-brutal-sm">
-                <div class="flex items-center mb-4 gap-2">
-                    <i class="fas fa-bullseye text-electric-purple text-xl"></i>
-                    <h4 class="text-lg font-black text-jet uppercase">Optional Instructions</h4>
-                    <div class="ml-auto bg-electric-purple text-white font-black text-xs uppercase px-2 py-1 border-2 border-jet transform -rotate-2">
-                        Pro Tip
-                    </div>
-                </div>
-                <textarea id="instructions-input" rows="3" class="brutal-input w-full p-3" placeholder="Tell the clip selector what to do (e.g., 'Prefer definitions', 'Keep first sentence', 'Avoid sponsor mentions')"></textarea>
-            </div>
+                        <div>
+                            <label for="language-select" class="block text-[8px] text-arcade-yellow mb-2 uppercase">
+                                LANGUAGE
+                            </label>
+                            <select id="language-select" class="arcade-select w-full">
+                                <option value="">AUTO-DETECT</option>
+                                <option value="en">ENGLISH</option>
+                                <option value="es">SPANISH</option>
+                                <option value="fr">FRENCH</option>
+                                <option value="de">GERMAN</option>
+                                <option value="it">ITALIAN</option>
+                                <option value="pt">PORTUGUESE</option>
+                                <option value="ru">RUSSIAN</option>
+                                <option value="ja">JAPANESE</option>
+                                <option value="ko">KOREAN</option>
+                                <option value="zh">CHINESE</option>
+                            </select>
+                        </div>
 
-            <!-- Thick Divider -->
-            <div class="border-t-4 border-jet border-dashed my-6"></div>
+                        <div>
+                            <label for="compute-type" class="block text-[8px] text-arcade-yellow mb-2 uppercase">
+                                COMPUTE TYPE
+                            </label>
+                            <select id="compute-type" class="arcade-select w-full">
+                                <option value="int8_float16">GPU OPTIMIZED</option>
+                                <option value="int8">CPU ONLY</option>
+                                <option value="float16">GPU HIGH PRECISION</option>
+                            </select>
+                        </div>
 
-            <!-- Upload Button -->
-            <button id="upload-btn" class="brutal-btn-primary w-full py-5 px-6" disabled>
-                <div class="flex items-center justify-center gap-3">
-                    <i class="fas fa-magic text-2xl"></i>
-                    <span class="text-xl">CREATE CLIPS</span>
-                    <i class="fas fa-arrow-right text-xl"></i>
-                </div>
-                <div class="text-sm font-bold mt-1 opacity-80">Powered by Whisper + GPT</div>
-            </button>
-        </div>
-
-        <!-- Progress Section -->
-        <div id="progress-section" class="hidden brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-            <div class="text-center">
-                <div class="mb-6 inline-block">
-                    <div class="bg-electric-blue border-4 border-jet p-5 inline-block shadow-brutal-sm animate-wiggle">
-                        <div class="loading-spinner"></div>
-                    </div>
-                </div>
-                <h3 class="text-2xl sm:text-3xl font-black text-jet uppercase mb-2">Finding the Best Clips</h3>
-                <p id="progress-text" class="text-jet font-bold mb-6">Transcribing, selecting moments, preparing downloads...</p>
-                <div class="progress-brutal bg-cream-100 border-4 border-jet h-8 overflow-hidden relative">
-                    <div id="progress-fill" class="h-full bg-electric-yellow transition-all duration-500 ease-out relative" style="width: 0%">
-                        <div class="progress-stripes absolute inset-0"></div>
-                    </div>
-                </div>
-                <p class="text-sm text-jet font-bold mt-4 bg-cream-100 border-3 border-jet inline-block px-4 py-2 shadow-brutal-sm">
-                    <i class="fas fa-clock mr-2"></i> This may take a few minutes
-                </p>
-            </div>
-        </div>
-
-        <!-- Results Section -->
-        <div id="results-section" class="hidden">
-            <!-- Final Clip Player -->
-            <div id="final-video-card" class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8 hidden">
-                <div class="flex items-center mb-4 gap-2">
-                    <div class="bg-electric-purple border-3 border-jet p-2 shadow-brutal-sm">
-                        <i class="fas fa-film text-white text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-black text-jet uppercase">Final Clip (Chronological)</h4>
-                </div>
-                <div class="border-4 border-jet overflow-hidden shadow-brutal-sm">
-                    <video id="final-video" class="w-full bg-black" controls playsinline></video>
-                </div>
-                <div class="mt-4">
-                    <a id="download-final" class="brutal-btn-small bg-electric-purple text-white inline-flex items-center" download>
-                        <i class="fas fa-download mr-2"></i>Download Final Clip
-                    </a>
-                </div>
-            </div>
-
-            <!-- Success Header -->
-            <div class="text-center mb-8">
-                <div class="mb-4 inline-block">
-                    <div class="bg-electric-lime border-4 border-jet p-5 inline-block shadow-brutal-sm transform -rotate-2">
-                        <i class="fas fa-check text-jet text-4xl"></i>
-                    </div>
-                </div>
-                <h3 class="text-3xl sm:text-4xl font-black text-jet uppercase mb-2">Your Clips Are Ready!</h3>
-                <p class="text-jet font-bold text-lg">We generated captions and candidate short-form videos</p>
-                <div class="inline-block bg-electric-yellow border-3 border-jet px-4 py-1 mt-3 shadow-brutal-sm transform rotate-1 font-black text-sm uppercase">
-                    Fresh off the farm
-                </div>
-            </div>
-
-            <!-- Job Info -->
-            <div class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-                <div class="flex items-center mb-5 gap-2">
-                    <div class="bg-electric-blue border-3 border-jet p-2 shadow-brutal-sm">
-                        <i class="fas fa-info-circle text-white text-xl"></i>
-                    </div>
-                    <h4 class="text-xl font-black text-jet uppercase">Job Information</h4>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    <div class="bg-blue-50 p-4 border-3 border-jet">
-                        <span class="text-sm font-black text-jet uppercase">Job ID</span>
-                        <p id="job-id" class="text-sm text-jet font-mono bg-white p-2 border-2 border-jet mt-2"></p>
-                    </div>
-                    <div class="bg-green-50 p-4 border-3 border-jet">
-                        <span class="text-sm font-black text-jet uppercase">Status</span>
-                        <p id="job-status" class="text-sm text-jet font-black mt-2 flex items-center uppercase">
-                            <i class="fas fa-check-circle mr-2"></i>Completed Successfully
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Download Files -->
-            <div class="brutal-card bg-white border-4 border-jet shadow-brutal p-6 sm:p-8 mb-8">
-                <div class="flex items-center mb-6 gap-2">
-                    <div class="step-number bg-electric-yellow border-4 border-jet w-12 h-12 flex items-center justify-center shadow-brutal-sm transform rotate-3">
-                        <span class="text-2xl font-black text-jet">3</span>
-                    </div>
-                    <h4 class="text-2xl font-black text-jet uppercase">Download Your Files</h4>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                    <!-- Transcript -->
-                    <div class="download-item download-card-yellow">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-yellow">
-                                <i class="fas fa-file-alt text-jet text-2xl"></i>
+                        <div class="flex items-center">
+                            <div class="border-2 border-arcade-dim p-3 w-full">
+                                <label for="vad-filter" class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="vad-filter" class="arcade-checkbox mr-3 w-4 h-4">
+                                    <div>
+                                        <div class="text-[8px] text-arcade-green uppercase">
+                                            VOICE DETECTION
+                                        </div>
+                                        <div class="text-[7px] text-arcade-dim mt-1">FILTER OUT SILENCE</div>
+                                    </div>
+                                </label>
                             </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">Full Transcript</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Complete text transcript</p>
-                            <a id="download-txt" class="brutal-btn-download bg-electric-yellow text-jet w-full">
-                                <i class="fas fa-download mr-2"></i>Download TXT
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Segments -->
-                    <div class="download-item download-card-coral">
-                        <div class="text-center">
-                            <div class="download-icon bg-coral">
-                                <i class="fas fa-list text-white text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">Segments</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Timestamped segments (JSON)</p>
-                            <a id="download-segments" class="brutal-btn-download bg-coral text-white w-full">
-                                <i class="fas fa-download mr-2"></i>Download JSON
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Words -->
-                    <div class="download-item download-card-blue">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-blue">
-                                <i class="fas fa-align-left text-white text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">Word Timestamps</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Individual word timing</p>
-                            <a id="download-words" class="brutal-btn-download bg-electric-blue text-white w-full">
-                                <i class="fas fa-download mr-2"></i>Download JSON
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- SRT -->
-                    <div class="download-item download-card-lime">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-lime">
-                                <i class="fas fa-closed-captioning text-jet text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">SRT Subtitles</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Standard subtitle format</p>
-                            <a id="download-srt" class="brutal-btn-download bg-electric-lime text-jet w-full">
-                                <i class="fas fa-download mr-2"></i>Download SRT
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- VTT -->
-                    <div class="download-item download-card-purple">
-                        <div class="text-center">
-                            <div class="download-icon bg-electric-purple">
-                                <i class="fas fa-closed-captioning text-white text-2xl"></i>
-                            </div>
-                            <h5 class="font-black text-jet text-lg uppercase mb-1">VTT Subtitles</h5>
-                            <p class="text-sm text-jet font-bold mb-4">Web video subtitle format</p>
-                            <a id="download-vtt" class="brutal-btn-download bg-electric-purple text-white w-full">
-                                <i class="fas fa-download mr-2"></i>Download VTT
-                            </a>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- New Upload Button -->
-            <div class="mt-10 text-center">
-                <button id="new-upload-btn" class="brutal-btn-primary bg-electric-purple py-4 px-10 inline-block">
-                    <i class="fas fa-plus mr-3 text-xl"></i>
-                    <span class="text-lg">CREATE ANOTHER CLIP</span>
+                <!-- Cheat Codes (Instructions) -->
+                <div class="border-4 border-arcade-pink bg-arcade-bg p-4 sm:p-5 mb-6">
+                    <div class="flex items-center mb-3 gap-2">
+                        <span class="text-arcade-pink text-sm">&#9733;</span>
+                        <h4 class="text-[10px] text-arcade-pink">CHEAT CODES</h4>
+                        <span class="ml-auto text-[7px] text-arcade-dim border border-arcade-dim px-2 py-0.5">OPTIONAL</span>
+                    </div>
+                    <textarea id="instructions-input" rows="3" class="arcade-input w-full p-3 text-[10px]" placeholder="ENTER CHEAT CODES... (E.G. PREFER DEFINITIONS, KEEP FIRST SENTENCE, AVOID SPONSOR MENTIONS)"></textarea>
+                </div>
+
+                <!-- Pixel Divider -->
+                <div class="pixel-divider my-6"></div>
+
+                <!-- START GAME Button -->
+                <button id="upload-btn" class="arcade-btn-start w-full py-4 px-6 group" disabled>
+                    <div class="flex items-center justify-center gap-3">
+                        <span class="text-lg">&#9654;</span>
+                        <span class="text-sm sm:text-base">START GAME</span>
+                    </div>
+                    <div class="text-[8px] mt-2 opacity-60">POWERED BY WHISPER + GPT</div>
                 </button>
             </div>
-        </div>
 
-        <!-- Error Section -->
-        <div id="error-section" class="hidden brutal-card bg-white border-4 border-jet shadow-brutal-coral p-6 sm:p-8">
-            <div class="text-center">
-                <div class="mb-6 inline-block">
-                    <div class="bg-coral border-4 border-jet p-5 inline-block shadow-brutal-sm transform rotate-3">
-                        <i class="fas fa-exclamation-triangle text-white text-4xl"></i>
+            <!-- Stage 2: LOADING (Progress Section) -->
+            <div id="progress-section" class="hidden arcade-panel p-5 sm:p-8 mb-8">
+                <div class="text-center">
+                    <!-- Stage badge -->
+                    <div class="mb-4">
+                        <span class="stage-badge bg-arcade-cyan text-arcade-bg text-[10px] inline-block">STAGE 2</span>
+                    </div>
+
+                    <h3 class="text-sm sm:text-base text-arcade-cyan mb-2">LOADING...</h3>
+                    <p id="progress-text" class="text-[10px] text-arcade-green mb-6">BUILDING WORLD...</p>
+
+                    <!-- Runner Scene -->
+                    <div class="runner-scene mb-4">
+                        <div class="runner-character" id="runner-character">
+                            <div class="pixel-runner-frame1"></div>
+                        </div>
+                        <div class="runner-ground"></div>
+                    </div>
+
+                    <!-- Pixel Progress Bar -->
+                    <div class="progress-arcade border-4 border-arcade-green bg-arcade-bg h-6 overflow-hidden relative mb-4">
+                        <div id="progress-fill" class="h-full bg-arcade-green transition-all duration-500 ease-out relative progress-fill-arcade" style="width: 0%">
+                        </div>
+                    </div>
+
+                    <!-- Coin Counter -->
+                    <div class="inline-block border-2 border-arcade-yellow px-3 py-1">
+                        <span class="text-[8px] text-arcade-yellow">COINS: <span class="text-arcade-white" id="coin-counter">000</span></span>
                     </div>
                 </div>
-                <h3 class="text-2xl sm:text-3xl font-black text-jet uppercase mb-2">Oops! Something Broke</h3>
-                <p id="error-message" class="text-jet font-bold mb-6 bg-red-50 border-3 border-jet p-4 inline-block"></p>
-                <div>
-                    <button id="retry-btn" class="brutal-btn-primary bg-coral py-3 px-8 inline-block">
-                        <i class="fas fa-redo mr-2"></i>
-                        <span>TRY AGAIN</span>
+            </div>
+
+            <!-- Stage 3: LEVEL COMPLETE (Results Section) -->
+            <div id="results-section" class="hidden">
+
+                <!-- Final Clip Player -->
+                <div id="final-video-card" class="arcade-panel p-5 sm:p-8 mb-8 hidden">
+                    <div class="flex items-center mb-4 gap-2">
+                        <span class="text-arcade-pink">&#9654;</span>
+                        <h4 class="text-[10px] sm:text-xs text-arcade-pink">REPLAY</h4>
+                    </div>
+                    <div class="border-4 border-arcade-pink overflow-hidden">
+                        <video id="final-video" class="w-full bg-black" controls playsinline></video>
+                    </div>
+                    <div class="mt-4">
+                        <a id="download-final" class="arcade-btn-small bg-arcade-pink text-arcade-bg inline-flex items-center text-[10px]" download>
+                            &#8595; DOWNLOAD REPLAY
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Success Header -->
+                <div class="text-center mb-8">
+                    <div class="mb-4">
+                        <span class="stage-badge bg-arcade-yellow text-arcade-bg text-[10px] inline-block">STAGE 3</span>
+                    </div>
+                    <h3 class="text-base sm:text-xl text-arcade-yellow mb-2 level-complete-text">
+                        &#9733; LEVEL COMPLETE! &#9733;
+                    </h3>
+                    <p class="text-[10px] text-arcade-green">ALL CLIPS GENERATED SUCCESSFULLY</p>
+                    <div class="mt-3 inline-block border-2 border-arcade-yellow px-3 py-1">
+                        <span class="text-[8px] text-arcade-yellow animate-blink">HIGH SCORE!</span>
+                    </div>
+                </div>
+
+                <!-- Save File (Job Info) -->
+                <div class="arcade-panel p-5 sm:p-6 mb-8">
+                    <div class="flex items-center mb-4 gap-2">
+                        <span class="text-arcade-cyan">&#9776;</span>
+                        <h4 class="text-[10px] sm:text-xs text-arcade-cyan">SAVE FILE</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border-2 border-arcade-blue p-3">
+                            <span class="text-[8px] text-arcade-blue uppercase">SAVE ID</span>
+                            <p id="job-id" class="text-[8px] text-arcade-white font-mono mt-1 break-all"></p>
+                        </div>
+                        <div class="border-2 border-arcade-green p-3">
+                            <span class="text-[8px] text-arcade-green uppercase">STATUS</span>
+                            <p id="job-status" class="text-[8px] text-arcade-green mt-1 uppercase">COMPLETED</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Power-Ups (Download Files) -->
+                <div class="arcade-panel p-5 sm:p-8 mb-8">
+                    <div class="flex items-center mb-6 gap-2">
+                        <span class="text-arcade-yellow text-lg">&#9733;</span>
+                        <h4 class="text-xs sm:text-sm text-arcade-yellow">COLLECT POWER-UPS</h4>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- TXT = Scroll -->
+                        <div class="download-item powerup-card powerup-yellow animate-float" style="animation-delay: 0s;">
+                            <div class="text-center">
+                                <div class="powerup-icon text-3xl mb-3">&#128220;</div>
+                                <h5 class="text-[10px] text-arcade-yellow mb-1">SCROLL OF TEXT</h5>
+                                <p class="text-[7px] text-arcade-dim mb-3">FULL TRANSCRIPT</p>
+                                <a id="download-txt" class="arcade-btn-download bg-arcade-yellow text-arcade-bg w-full text-[8px]">
+                                    &#8595; COLLECT TXT
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- JSON Segments = Data Crystal -->
+                        <div class="download-item powerup-card powerup-blue animate-float" style="animation-delay: 0.3s;">
+                            <div class="text-center">
+                                <div class="powerup-icon text-3xl mb-3">&#128142;</div>
+                                <h5 class="text-[10px] text-arcade-cyan mb-1">DATA CRYSTAL</h5>
+                                <p class="text-[7px] text-arcade-dim mb-3">TIMED SEGMENTS</p>
+                                <a id="download-segments" class="arcade-btn-download bg-arcade-cyan text-arcade-bg w-full text-[8px]">
+                                    &#8595; COLLECT JSON
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Words = Star -->
+                        <div class="download-item powerup-card powerup-purple animate-float" style="animation-delay: 0.6s;">
+                            <div class="text-center">
+                                <div class="powerup-icon text-3xl mb-3">&#11088;</div>
+                                <h5 class="text-[10px] text-arcade-purple mb-1">STAR POWER</h5>
+                                <p class="text-[7px] text-arcade-dim mb-3">WORD TIMESTAMPS</p>
+                                <a id="download-words" class="arcade-btn-download bg-arcade-purple text-arcade-bg w-full text-[8px]">
+                                    &#8595; COLLECT JSON
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- SRT = Speech Bubble -->
+                        <div class="download-item powerup-card powerup-green animate-float" style="animation-delay: 0.9s;">
+                            <div class="text-center">
+                                <div class="powerup-icon text-3xl mb-3">&#128172;</div>
+                                <h5 class="text-[10px] text-arcade-green mb-1">SPEECH BUBBLE</h5>
+                                <p class="text-[7px] text-arcade-dim mb-3">SRT SUBTITLES</p>
+                                <a id="download-srt" class="arcade-btn-download bg-arcade-green text-arcade-bg w-full text-[8px]">
+                                    &#8595; COLLECT SRT
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- VTT = Film Strip -->
+                        <div class="download-item powerup-card powerup-red animate-float" style="animation-delay: 1.2s;">
+                            <div class="text-center">
+                                <div class="powerup-icon text-3xl mb-3">&#127916;</div>
+                                <h5 class="text-[10px] text-arcade-red mb-1">FILM STRIP</h5>
+                                <p class="text-[7px] text-arcade-dim mb-3">VTT SUBTITLES</p>
+                                <a id="download-vtt" class="arcade-btn-download bg-arcade-red text-arcade-bg w-full text-[8px]">
+                                    &#8595; COLLECT VTT
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Play Again -->
+                <div class="mt-8 text-center">
+                    <button id="new-upload-btn" class="arcade-btn-start py-3 px-8 inline-block">
+                        <span class="text-xs sm:text-sm">&#9654; PLAY AGAIN</span>
                     </button>
                 </div>
             </div>
-        </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="bg-jet border-t-4 border-jet mt-16">
-        <!-- Footer Marquee -->
-        <div class="marquee-strip bg-electric-yellow border-b-4 border-jet overflow-hidden py-1">
-            <div class="marquee-content animate-marquee whitespace-nowrap">
-                <span class="inline-block mx-8 text-jet font-black text-xs tracking-widest uppercase">
-                    CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM <i class="fas fa-star mx-3"></i> CLIPFARM
-                </span>
-            </div>
-        </div>
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div class="text-center">
-                <div class="flex items-center justify-center mb-6">
-                    <div class="bg-electric-yellow border-4 border-cream-100 px-5 py-2 transform -rotate-2">
-                        <h3 class="text-2xl font-black text-jet uppercase">
-                            <i class="fas fa-seedling mr-2"></i>ClipFarm
-                        </h3>
+            <!-- Error Section -->
+            <div id="error-section" class="hidden arcade-panel border-arcade-red p-5 sm:p-8">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <span class="text-arcade-red text-3xl">&#9888;</span>
                     </div>
-                </div>
-                <p class="text-cream-100 font-bold text-lg mb-6">Turn long videos into scroll-stopping shorts with captions</p>
-
-                <!-- Tech Stickers -->
-                <div class="flex flex-wrap items-center justify-center gap-3 mb-8">
-                    <div class="footer-sticker bg-electric-purple transform -rotate-2">
-                        <i class="fas fa-brain mr-1"></i> Whisper
+                    <h3 class="text-sm text-arcade-red mb-3">GAME OVER</h3>
+                    <p id="error-message" class="text-[10px] text-arcade-white mb-6 border-2 border-arcade-red p-3 inline-block"></p>
+                    <div>
+                        <button id="retry-btn" class="arcade-btn-start bg-arcade-red py-3 px-8 inline-block">
+                            <span class="text-[10px]">&#8634; CONTINUE?</span>
+                        </button>
                     </div>
-                    <div class="footer-sticker bg-electric-blue transform rotate-1">
-                        <i class="fas fa-robot mr-1"></i> GPT
-                    </div>
-                    <div class="footer-sticker bg-coral transform -rotate-1">
-                        <i class="fas fa-film mr-1"></i> FFmpeg
-                    </div>
-                    <div class="footer-sticker bg-electric-lime text-jet transform rotate-2">
-                        <i class="fas fa-code mr-1"></i> FastAPI
-                    </div>
-                    <div class="footer-sticker bg-electric-yellow text-jet transform -rotate-3">
-                        <i class="fas fa-server mr-1"></i> Node.js
-                    </div>
-                </div>
-
-                <div class="border-t-3 border-cream-200 border-opacity-20 pt-6">
-                    <p class="text-cream-200 font-bold text-sm opacity-60">&copy; 2024 ClipFarm. All rights reserved.</p>
                 </div>
             </div>
-        </div>
-    </footer>
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t-4 border-arcade-dim mt-8">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 py-6">
+                <div class="text-center">
+                    <div class="mb-4">
+                        <span class="text-sm text-arcade-yellow">CLIPFARM</span>
+                    </div>
+                    <p class="text-[8px] text-arcade-dim mb-4">AI-POWERED VIDEO CLIP EXTRACTION</p>
+
+                    <!-- Tech Badges -->
+                    <div class="flex flex-wrap items-center justify-center gap-2 mb-4">
+                        <span class="tech-badge border-arcade-purple text-arcade-purple">WHISPER</span>
+                        <span class="tech-badge border-arcade-cyan text-arcade-cyan">GPT</span>
+                        <span class="tech-badge border-arcade-red text-arcade-red">FFMPEG</span>
+                        <span class="tech-badge border-arcade-green text-arcade-green">FASTAPI</span>
+                        <span class="tech-badge border-arcade-yellow text-arcade-yellow">NODE.JS</span>
+                    </div>
+
+                    <div class="border-t border-arcade-dim border-opacity-30 pt-3">
+                        <p class="text-[7px] text-arcade-dim opacity-50">&copy; 2024 CLIPFARM. INSERT COIN TO CONTINUE.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+    // Generate twinkling stars
+    (function() {
+        var c = document.getElementById('stars-container');
+        if (!c) return;
+        for (var i = 0; i < 50; i++) {
+            var s = document.createElement('div');
+            s.className = 'pixel-star';
+            s.style.left = Math.random() * 100 + '%';
+            s.style.top = Math.random() * 100 + '%';
+            s.style.animationDelay = (Math.random() * 5).toFixed(2) + 's';
+            s.style.animationDuration = (2 + Math.random() * 3).toFixed(2) + 's';
+            c.appendChild(s);
+        }
+    })();
+
+    // Pixel sprite frame toggle for runner
+    (function() {
+        var runner = document.getElementById('runner-character');
+        if (!runner) return;
+        var frame = 0;
+        setInterval(function() {
+            frame = 1 - frame;
+            var child = runner.firstElementChild;
+            if (child) {
+                child.className = frame ? 'pixel-runner-frame2' : 'pixel-runner-frame1';
+            }
+        }, 200);
+    })();
+    </script>
 
     <script src="/js/app.js"></script>
 </body>
