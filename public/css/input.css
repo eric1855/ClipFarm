@@ -174,6 +174,50 @@ body {
   cursor: grabbing;
 }
 
+/* --- Titlebar Glass Effect --- */
+
+.titlebar-glass {
+  position: relative;
+  color: #00ff41;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: rgba(0, 255, 65, 0.03);
+  border: 1px solid rgba(0, 255, 65, 0.08);
+  overflow: hidden;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.titlebar-glass::before {
+  content: '';
+  position: absolute;
+  top: var(--glass-y, 50%);
+  left: var(--glass-x, 50%);
+  width: 120px;
+  height: 120px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 65, 0.25) 0%,
+    rgba(0, 255, 65, 0.08) 40%,
+    transparent 70%
+  );
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.titlebar-glass:hover {
+  border-color: rgba(0, 255, 65, 0.2);
+  background: rgba(0, 255, 65, 0.05);
+  text-shadow: 0 0 12px rgba(0, 255, 65, 0.7), 0 0 24px rgba(0, 255, 65, 0.3);
+}
+
+.titlebar-glass:hover::before {
+  opacity: 1;
+}
+
 .titlebar-dot {
   display: inline-block;
   width: 12px;

@@ -82,6 +82,16 @@ document.addEventListener('DOMContentLoaded', () => {
     snapToCenter();
   });
 
+  // Glass cursor effect on titlebar text
+  const glass = document.querySelector('.titlebar-glass');
+  if (glass) {
+    glass.addEventListener('mousemove', (e) => {
+      const rect = glass.getBoundingClientRect();
+      glass.style.setProperty('--glass-x', (e.clientX - rect.left) + 'px');
+      glass.style.setProperty('--glass-y', (e.clientY - rect.top) + 'px');
+    });
+  }
+
   // Keep window in bounds on resize
   window.addEventListener('resize', () => {
     let left = win.offsetLeft;
