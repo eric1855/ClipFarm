@@ -1,15 +1,16 @@
 # Full End-to-End AI Video Clipper
 
 <p align="center">
-<a href="https://github.com/eric1855/ClipFarm/blob/main/demo.mp4">
-<img src="https://img.shields.io/badge/🎬_Watch_Demo-58A6FF?style=for-the-badge"/>
-</a>
 <a href="https://github.com/eric1855/ClipFarm">
 <img src="https://img.shields.io/badge/Source_Code-333?style=for-the-badge&logo=github&logoColor=white"/>
 </a>
 </p>
 
 A full-stack web application that extracts captions and timestamps from video/audio files using faster-whisper for automatic speech recognition (ASR). Features a FastAPI backend and a modern Node.js frontend with Tailwind CSS.
+
+## Demo
+
+https://github.com/eric1855/ClipFarm/raw/main/demo.mp4
 
 ## Features
 
