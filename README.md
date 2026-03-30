@@ -14,6 +14,9 @@ A full-stack web application that extracts captions and timestamps from video/au
 <a href="https://drive.google.com/file/d/1MqYRu6mwf5bVdGm80AuJEJDopx05-E30/view?usp=sharing" target="_blank">
 <img src="https://img.shields.io/badge/Watch_Demo-4285F4?style=for-the-badge&logo=googledrive&logoColor=white"/>
 </a>
+<a href="https://drive.google.com/file/d/1vnNqPjb15x5mxHe_59MipTUJfzSqPFer/view?usp=sharing" target="_blank">
+<img src="https://img.shields.io/badge/ScottyStalls_Demo-4285F4?style=for-the-badge&logo=googledrive&logoColor=white"/>
+</a>
 </p>
 
 ## Features
