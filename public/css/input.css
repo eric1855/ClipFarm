@@ -579,8 +579,11 @@ body {
 .progress-bar-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   font-size: 0.85rem;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .progress-bar-track {

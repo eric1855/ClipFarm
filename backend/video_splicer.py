@@ -326,15 +326,9 @@ class VideoSplicer:
         
         candidates = []
         
-        # Create all candidates
+        # Only create the chronological candidate (single output)
         candidate_methods = [
-            self.create_candidate_1_top_clips,
-            self.create_candidate_2_high_score,
-            self.create_candidate_3_short_clips,
-            self.create_candidate_4_best_hooks,
             self.create_candidate_5_chronological,
-            self.create_candidate_6_trimmed_segments,
-            self.create_candidate_7_no_promo
         ]
         
         for method in candidate_methods:

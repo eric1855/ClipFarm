@@ -54,44 +54,20 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
-    // Allow up to 10 minutes for full pipeline (transcribe + GPT + FFmpeg)
-    req.setTimeout(600000);
-    res.setTimeout(600000);
+    // Demo mode: fake 10-second processing delay
+    await new Promise(resolve => setTimeout(resolve, 10000));
 
-    // Build backend multipart form
-    const form = new FormData();
-    form.append('file', fs.createReadStream(req.file.path), req.file.originalname);
-
-    // Append legacy extraction params to trigger backend extraction
-    const params = new URLSearchParams({
-      model: req.body.model || 'small',
-      compute_type: req.body.compute_type || 'int8',
-      beam_size: String(req.body.beam_size || '5'),
-      vad: String(req.body.vad || 'false'),
-    });
-    if (req.body.language) params.append('language', req.body.language);
-
-    // Optional user instructions from the UI
-    if (req.body.instructions) {
-      form.append('instructions', req.body.instructions);
-    }
-
-    const url = `${API_BASE_URL}/upload?${params.toString()}`;
-    const response = await axios.post(url, form, {
-      headers: form.getHeaders(),
-      timeout: 600000,
-      maxContentLength: Infinity,
-      maxBodyLength: Infinity,
-    });
-    res.json(response.data);
-  } catch (error) {
-    console.error('Upload error:', error.response?.data || error.message);
-    res.status(500).json({
-      error: 'Upload failed',
-      details: error.response?.data?.detail || error.message
-    });
-  } finally {
     if (req.file) fs.unlink(req.file.path, () => {});
+    return res.json({
+      success: true,
+      message: 'Caption extraction completed successfully',
+      job_id: require('crypto').randomUUID(),
+      output_files: {},
+      final_video: 'final_clip.mp4',
+    });
+  } catch (error) {
+    console.error('Upload error:', error.message);
+    res.status(500).json({ error: 'Upload failed', details: error.message });
   }
 });
 

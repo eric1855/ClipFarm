@@ -204,7 +204,6 @@ class CaptionExtractor {
                 formData.append('language', language);
             }
 
-            this.updateProgress(10, 'Uploading file to server...');
             this.startProgressSimulation();
 
             const response = await fetch('/api/upload', {
@@ -214,7 +213,7 @@ class CaptionExtractor {
             });
 
             this.stopProgressSimulation();
-            this.updateProgress(95, 'Receiving results...');
+            this._setProgress(95, 'Receiving results...');
 
             const result = await response.json();
 
@@ -222,7 +221,7 @@ class CaptionExtractor {
                 throw new Error(result.details || result.error || 'Upload failed');
             }
 
-            this.updateProgress(100, 'Processing complete!');
+            this._setProgress(100, 'Processing complete!');
 
             // Wait a moment to show completion
             setTimeout(() => {
@@ -249,29 +248,34 @@ class CaptionExtractor {
     }
 
     startProgressSimulation() {
+        // Phases timed for ~8 minute processing (480s)
         const phases = [
+            { at: 5, text: 'Uploading file to server...' },
             { at: 15, text: 'Transcribing audio with Whisper...' },
             { at: 30, text: 'Analyzing transcript segments...' },
-            { at: 45, text: 'Selecting best clips via GPT-4o...' },
-            { at: 55, text: 'Extracting video segments with FFmpeg...' },
-            { at: 65, text: 'Generating candidate compilations...' },
-            { at: 75, text: 'Encoding candidate videos...' },
-            { at: 85, text: 'Finalizing output...' },
+            { at: 45, text: 'Selecting best clips via AI...' },
+            { at: 58, text: 'Extracting video segments with FFmpeg...' },
+            { at: 70, text: 'Generating candidate compilations...' },
+            { at: 80, text: 'Encoding output video...' },
+            { at: 88, text: 'Finalizing output...' },
         ];
 
+        this._simPercent = 2;
         let phaseIndex = 0;
-        let currentPercent = 10;
 
         this._progressInterval = setInterval(() => {
-            if (phaseIndex < phases.length && currentPercent >= phases[phaseIndex].at - 1) {
-                this.updateProgress(phases[phaseIndex].at, phases[phaseIndex].text);
-                currentPercent = phases[phaseIndex].at;
+            this._simPercent += 8;
+            if (this._simPercent > 92) this._simPercent = 92;
+
+            // Advance phase label when we pass the threshold
+            let text = null;
+            while (phaseIndex < phases.length && this._simPercent >= phases[phaseIndex].at) {
+                text = phases[phaseIndex].text;
                 phaseIndex++;
-            } else if (currentPercent < 90) {
-                currentPercent += 0.5;
-                document.getElementById('progress-fill').style.width = currentPercent + '%';
             }
-        }, 2000);
+
+            this._setProgress(this._simPercent, text);
+        }, 800);
     }
 
     stopProgressSimulation() {
@@ -281,9 +285,21 @@ class CaptionExtractor {
         }
     }
 
+    _setProgress(percent, text) {
+        // Only allow progress to move forward, never backward
+        const bar = document.getElementById('progress-fill');
+        const label = document.getElementById('progress-text');
+        const current = parseFloat(bar.style.width) || 0;
+        if (percent > current) {
+            bar.style.width = percent + '%';
+        }
+        if (text) {
+            label.textContent = text;
+        }
+    }
+
     updateProgress(percent, text) {
-        document.getElementById('progress-fill').style.width = percent + '%';
-        document.getElementById('progress-text').textContent = text;
+        this._setProgress(percent, text);
     }
 
     showResults(result) {
@@ -302,22 +318,18 @@ class CaptionExtractor {
 
         let totalFiles = 5; // transcript files
 
-        // Handle final video playback + download if available
+        // Show the final output clip
         try {
-            const finalPath = result.final_video || result.combined_video;
             const card = document.getElementById('final-video-card');
             const videoEl = document.getElementById('final-video');
             const dlEl = document.getElementById('download-final');
-            if (finalPath && card && videoEl && dlEl) {
-                const fname = finalPath.split(/[/\\]/).pop();
-                const url = `/media/output/${encodeURIComponent(fname)}`;
+            if (card && videoEl && dlEl) {
+                const url = '/media/output/final_clip.mp4';
                 videoEl.src = url;
                 dlEl.href = url;
-                dlEl.setAttribute('download', fname);
+                dlEl.setAttribute('download', 'final_clip.mp4');
                 card.classList.remove('hidden');
                 totalFiles += 1;
-            } else if (card) {
-                card.classList.add('hidden');
             }
         } catch (e) {
             console.warn('Final video not available:', e);
