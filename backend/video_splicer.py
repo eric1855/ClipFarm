@@ -38,23 +38,33 @@ class VideoSplicer:
         return f"{hours:02d}:{minutes:02d}:{secs:06.3f}"
     
     def _get_video_info(self):
-        """Get source video width, height, and fps using ffprobe."""
-        cmd = [
-            'ffprobe', '-v', 'quiet', '-print_format', 'json',
-            '-show_streams', '-select_streams', 'v:0', self.input_video
-        ]
+        """Get source video width, height, fps, and audio sample rate using ffprobe."""
         try:
-            r = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            # Get video stream info
+            cmd_v = [
+                'ffprobe', '-v', 'quiet', '-print_format', 'json',
+                '-show_streams', '-select_streams', 'v:0', self.input_video
+            ]
+            r = subprocess.run(cmd_v, capture_output=True, text=True, check=True)
             info = json.loads(r.stdout)
             stream = info['streams'][0]
             w = int(stream['width'])
             h = int(stream['height'])
-            # Parse fps from r_frame_rate like "30/1" or "30000/1001"
             num, den = stream.get('r_frame_rate', '30/1').split('/')
             fps = round(int(num) / int(den))
-            return w, h, fps
+
+            # Get audio stream info
+            cmd_a = [
+                'ffprobe', '-v', 'quiet', '-print_format', 'json',
+                '-show_streams', '-select_streams', 'a:0', self.input_video
+            ]
+            ra = subprocess.run(cmd_a, capture_output=True, text=True, check=True)
+            ainfo = json.loads(ra.stdout)
+            sample_rate = int(ainfo['streams'][0].get('sample_rate', 44100)) if ainfo.get('streams') else 44100
+
+            return w, h, fps, sample_rate
         except Exception:
-            return 1920, 1080, 30  # sensible defaults
+            return 1920, 1080, 30, 44100
 
     def _generate_clip_srt(self, clip: Dict, output_path: str) -> bool:
         """Generate an SRT file for a single clip using word-level timestamps."""
@@ -111,9 +121,8 @@ class VideoSplicer:
         return f"{h:02d}:{m:02d}:{s:06.3f}".replace('.', ',')
 
     def _generate_title_card(self, text: str, duration: float, output_path: str,
-                              width: int, height: int, fps: int) -> bool:
+                              width: int, height: int, fps: int, sample_rate: int = 44100) -> bool:
         """Generate a title card MP4: text centered on black background with silent audio."""
-        # Escape special chars for FFmpeg drawtext
         escaped = text.replace("'", "'\\''").replace(":", "\\:").replace("%", "%%")
         font_path = "/System/Library/Fonts/Supplemental/Arial Bold.ttf"
         fontsize = max(36, min(64, width // 20))
@@ -121,7 +130,7 @@ class VideoSplicer:
         cmd = [
             'ffmpeg', '-y',
             '-f', 'lavfi', '-i', f'color=c=black:s={width}x{height}:d={duration}:r={fps}',
-            '-f', 'lavfi', '-i', f'anullsrc=r=44100:cl=stereo',
+            '-f', 'lavfi', '-i', f'anullsrc=r={sample_rate}:cl=stereo',
             '-vf', (
                 f"drawtext=text='{escaped}':"
                 f"fontfile='{font_path}':"
@@ -132,7 +141,7 @@ class VideoSplicer:
             ),
             '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23',
             '-pix_fmt', 'yuv420p',
-            '-c:a', 'aac', '-b:a', '128k',
+            '-c:a', 'aac', '-b:a', '128k', '-ar', str(sample_rate),
             '-shortest',
             str(output_path)
         ]
@@ -150,29 +159,6 @@ class VideoSplicer:
         """
         start_time = self.format_time(start)
         duration = max(0.0, end - start)
-
-        # If subtitles requested, go straight to re-encode with subtitle filter
-        if subtitle_path and os.path.exists(subtitle_path):
-            # Escape path for FFmpeg filter (colons and backslashes)
-            escaped_sub = subtitle_path.replace('\\', '/').replace(':', '\\:')
-            sub_style = "FontSize=24,Alignment=2,MarginV=30,BorderStyle=3,Outline=2,Shadow=1,Bold=1,Fontname=Arial"
-            cmd_sub = [
-                'ffmpeg', '-y',
-                '-ss', start_time,
-                '-t', str(duration),
-                '-i', self.input_video,
-                '-vf', f"subtitles='{escaped_sub}':force_style='{sub_style}'",
-                '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23',
-                '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
-                '-c:a', 'aac', '-b:a', '128k',
-                output_path
-            ]
-            try:
-                subprocess.run(cmd_sub, capture_output=True, text=True, check=True)
-                return True
-            except subprocess.CalledProcessError as e:
-                print(f"Subtitle burn failed, extracting without subs: {e.stderr[:200]}")
-                # Fall through to normal extraction
 
         # Attempt 1: copy (fast) with -ss before -i for keyframe-seeking
         cmd_copy_fast = [
@@ -354,6 +340,52 @@ class VideoSplicer:
                 return str(output_path)
         return None
     
+    def _extract_clip_precise(self, start: float, end: float, output_path: str, subtitle_path: str = None) -> bool:
+        """Extract a clip with frame-accurate timestamps (always re-encodes).
+        Uses -ss after -i for precise seeking, and -t for exact duration."""
+        start_time = self.format_time(start)
+        duration = max(0.0, end - start)
+
+        vf_filters = []
+
+        # Add subtitle burn-in if available
+        if subtitle_path and os.path.exists(subtitle_path):
+            escaped_sub = subtitle_path.replace('\\', '/').replace(':', '\\:')
+            sub_style = "FontSize=24,Alignment=2,MarginV=30,BorderStyle=3,Outline=2,Shadow=1,Bold=1,Fontname=Arial"
+            vf_filters.append(f"subtitles='{escaped_sub}':force_style='{sub_style}'")
+
+        # -ss AFTER -i = frame-accurate seeking (slower but precise)
+        cmd = [
+            'ffmpeg', '-y',
+            '-i', self.input_video,
+            '-ss', start_time,
+            '-t', str(duration),
+        ]
+        if vf_filters:
+            cmd += ['-vf', ','.join(vf_filters)]
+        cmd += [
+            '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '23',
+            '-pix_fmt', 'yuv420p', '-movflags', '+faststart',
+            '-c:a', 'aac', '-b:a', '128k',
+            output_path
+        ]
+        try:
+            subprocess.run(cmd, capture_output=True, text=True, check=True)
+            # Log actual extracted duration for debugging
+            try:
+                probe = subprocess.run(
+                    ['ffprobe', '-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', output_path],
+                    capture_output=True, text=True, check=True
+                )
+                actual_dur = float(probe.stdout.strip())
+                print(f"  Extracted {start:.1f}-{end:.1f} ({duration:.1f}s requested) → {actual_dur:.1f}s actual")
+            except Exception:
+                pass
+            return True
+        except subprocess.CalledProcessError as e:
+            print(f"Error extracting clip {start}-{end}: {e.stderr[:200]}")
+            return False
+
     def create_candidate_5_chronological(self):
         """Candidate 5: Clips in chronological order with burned captions and title cards."""
         print("Creating Candidate 5: Chronological order (enhanced)...")
@@ -362,16 +394,15 @@ class VideoSplicer:
         has_titles = bool(self.transition_titles)
         has_words = bool(self.words_data)
 
-        # Get source video dimensions for title cards
-        if has_titles:
-            width, height, fps = self._get_video_info()
+        # Get source video info for title cards
+        width, height, fps, sample_rate = self._get_video_info()
 
         final_paths = []
         for i, clip in enumerate(chronological_clips):
             # Insert title card before each clip
             if has_titles and i < len(self.transition_titles) and self.transition_titles[i]:
                 title_path = self.output_dir / f"title_{i+1}.mp4"
-                if self._generate_title_card(self.transition_titles[i], 2.0, str(title_path), width, height, fps):
+                if self._generate_title_card(self.transition_titles[i], 2.0, str(title_path), width, height, fps, sample_rate):
                     final_paths.append(str(title_path))
 
             # Generate per-clip SRT for subtitle burn-in
@@ -381,12 +412,22 @@ class VideoSplicer:
                 if self._generate_clip_srt(clip, str(srt_file)):
                     srt_path = str(srt_file)
 
-            # Extract clip (with subtitles if available)
+            # Extract clip with precise timestamps (always re-encodes)
             clip_path = self.output_dir / f"chrono_clip_{i+1}.mp4"
-            if self.extract_clip(clip['start'], clip['end'], str(clip_path), subtitle_path=srt_path):
+            if self._extract_clip_precise(clip['start'], clip['end'], str(clip_path), subtitle_path=srt_path):
                 final_paths.append(str(clip_path))
 
         if final_paths:
+            print(f"  Chronological: {len(final_paths)} segments to concat:")
+            for p in final_paths:
+                try:
+                    probe = subprocess.run(
+                        ['ffprobe', '-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', p],
+                        capture_output=True, text=True, check=True
+                    )
+                    print(f"    {os.path.basename(p)}: {float(probe.stdout.strip()):.1f}s")
+                except Exception:
+                    print(f"    {os.path.basename(p)}: ???")
             output_path = self.output_dir / "candidate_5_chronological.mp4"
             if self.concatenate_videos(final_paths, str(output_path), encode=True):
                 print(f"✓ Created: {output_path} (with {'captions' if has_words else 'no captions'}, {'titles' if has_titles else 'no titles'})")
